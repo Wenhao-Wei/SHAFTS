@@ -1,0 +1,47 @@
+rank,name,uniprot,species,score
+1,Cell division protein kinase 2,P24941,Homo sapiens,1.0
+2,Dihydrofolate reductase,P22906,Candida albicans,0.938
+3,Tyrosine-protein kinase HCK,P08631,Homo sapiens,0.391
+4,"Phosphatidylinositol-4,5-bisphosphate 3-kinase catalytic subunit gamma isoform",P48736,Homo sapiens,0.366
+5,MAP kinase-activated protein kinase 2,P49137,Homo sapiens,0.318
+6,Estrogen receptor,P03372,Homo sapiens,0.294
+7,Coagulation factor VII,P08709,Homo sapiens,0.288
+8,Prostaglandin G/H synthase 2,P35354,Homo sapiens,0.285
+9,Proto-oncogene serine/threonine-protein kinase Pim-1,P11309,Homo sapiens,0.285
+10,Prothrombin,P00734,Homo sapiens,0.227
+11,Trypsin-1,P07477,Homo sapiens,0.227
+12,Proto-oncogene tyrosine-protein kinase LCK,P06239,Homo sapiens,0.172
+13,Tyrosine-protein kinase Lyn,P07948,Homo sapiens,0.172
+14,"cAMP-specific 3',5'-cyclic phosphodiesterase 4A",P27815,Homo sapiens,0.135
+15,"Biphenyl-2,3-diol 1,2-dioxygenase",P47228,Burkholderia xenovorans,0.135
+16,"Biphenyl-2,3-diol 1,2-dioxygenase",P17297,Pseudomonas sp.,0.135
+17,"cAMP-specific 3',5'-cyclic phosphodiesterase 4B",Q07343,Homo sapiens,0.135
+18,Urokinase-type plasminogen activator,P00749,Homo sapiens,0.096
+19,Tyrosine-protein kinase JAK2,O60674,Homo sapiens,0.047
+20,Tyrosine-protein kinase JAK3,P52333,Homo sapiens,0.047
+21,Tyrosine-protein kinase JAK1,P23458,Homo sapiens,0.047
+22,Death-associated protein kinase 3,O43293,Homo sapiens,0.047
+23,Retinoic acid receptor gamma-1,P13631,Homo sapiens,0.037
+24,Retinoic acid receptor alpha,P10276,Homo sapiens,0.037
+25,Retinoic acid receptor beta,P10826,Homo sapiens,0.037
+26,Retinoic acid receptor RXR-gamma,P48443,Homo sapiens,0.037
+27,Retinoic acid receptor RXR-beta,P28702,Homo sapiens,0.037
+28,D(1B) dopamine receptor,P21918,Homo sapiens,0.036
+29,D(1A) dopamine receptor,P21728,Homo sapiens,0.036
+30,Alpha-2B adrenergic receptor,P18089,Homo sapiens,0.036
+31,Alpha-2C adrenergic receptor,P18825,Homo sapiens,0.036
+32,D-HSCDK2,O75100,Homo sapiens,0.03
+33,Cyclin-dependent kinase 5 activator 1,Q15078,Homo sapiens,0.03
+34,Glycogen synthase kinase-3 beta,P49841,Homo sapiens,0.03
+35,Cell division protein kinase 5,Q00535,Homo sapiens,0.03
+36,Cell division control protein 2 homolog,P06493,Homo sapiens,0.03
+37,D1 dopamine receptor-interacting protein calcyon,Q9NYX4,Homo sapiens,0.0
+38,5-hydroxytryptamine 2C receptor,P28335,Homo sapiens,0.0
+39,5-hydroxytryptamine 1D receptor,P28221,Homo sapiens,0.0
+40,D(2) dopamine receptor,P14416,Homo sapiens,0.0
+41,D(3) dopamine receptor,P35462,Homo sapiens,0.0
+42,5-hydroxytryptamine 1A receptor,P08908,Homo sapiens,0.0
+43,5-hydroxytryptamine 2B receptor,P41595,Homo sapiens,0.0
+44,Alpha-2A adrenergic receptor,P08913,Homo sapiens,0.0
+45,D(4) dopamine receptor,P21917,Homo sapiens,0.0
+46,5-hydroxytryptamine 1B receptor,P28222,Homo sapiens,0.0
