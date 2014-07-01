@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="jars/biojava.jar"/>
+	<classpathentry exported="true" kind="lib" path="jars/Jmol-13.0.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="jars/substance.jar"/>
+	<classpathentry exported="true" kind="lib" path="jars/quaqua.jar"/>
+	<classpathentry exported="true" kind="lib" path="jars/jchempaint-3.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="jars/openbabel.jar"/>
+	<classpathentry exported="true" kind="lib" path="jars/beautyeye_lnf.jar"/>
+	<classpathentry kind="lib" path="jars/commons-logging.jar"/>
+	<classpathentry kind="lib" path="jars/spring.jar"/>
+	<classpathentry kind="lib" path="jars/dom4j.jar"/>
+	<classpathentry kind="lib" path="jars/liquidlnf.jar"/>
+	<classpathentry kind="lib" path="jars/poi-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="jars/remoteservice.jar"/>
+	<classpathentry kind="lib" path="jars/jsch-0.1.51.jar"/>
+	<classpathentry kind="lib" path="jars/mysql-connector-java-5.1.26-bin.jar"/>
+	<classpathentry kind="lib" path="jars/theme.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
