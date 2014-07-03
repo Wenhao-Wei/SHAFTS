@@ -76,6 +76,44 @@ public class CheckUserStatus {
 		return flag;
 	}
 	/**
+	 * verify the user
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean verify(String key) throws Exception{
+		boolean hasverified = false;
+		try{
+			connection();
+			isconnect = true;
+			} catch (IOException e) {
+						isconnect = false;
+						JOptionPane.showMessageDialog( null,"连接异常！");
+						}
+		if(isconnect){
+			try {
+				out = new DataOutputStream(socket.getOutputStream());
+				getWindowsMACAddress getmac = new getWindowsMACAddress();
+				String mac = getmac.getAddress();
+				out.writeInt(4);
+				out.writeUTF(mac);
+				out.writeUTF(key);
+				out.flush();
+				} catch (IOException e) {
+					if (out != null)
+						out.close();
+					}
+			try{
+				getMessageStream = new DataInputStream(new BufferedInputStream(
+						socket.getInputStream()));
+				hasverified = Boolean.valueOf(getMessageStream.readUTF());
+				}catch(Exception e){
+						e.printStackTrace();
+					}
+		}
+		return hasverified;
+	}
+	/**
 	 * check user left days
 	 * @throws Exception
 	 */
@@ -120,14 +158,20 @@ public class CheckUserStatus {
 		return leftdays;
 		
 	}
-	public int buypro(int days, int money) throws Exception{
-		int ISsuccess = 0;
+	/**
+	 *  pay for use the system
+	 * @param days
+	 * @param money
+	 * @return
+	 * @throws Exception
+	 */
+	public String buypro(int days, int money, String phonenumber) throws Exception{
+		String publickey = null;
 		try {
 			connection();
 			isconnect = true;
 		} catch (IOException e) {
 			isconnect = false;
-			ISsuccess = 0;
 			JOptionPane.showMessageDialog( null,"连接异常！");
 		}
 		if(isconnect){
@@ -139,20 +183,20 @@ public class CheckUserStatus {
 				out.writeUTF(mac);
 				out.writeInt(days);
 				out.writeInt(money);
+				out.writeUTF(phonenumber);
 				out.flush();
 			} catch (IOException e) {
 				if (out != null)
 					out.close();
-					ISsuccess = 0;
 			}
 			try{
 				getMessageStream = new DataInputStream(new BufferedInputStream(
 						socket.getInputStream()));
-				ISsuccess = getMessageStream.readInt();				
+				publickey = getMessageStream.readUTF();				
 			}catch(Exception e){
 				
 			}
 		}
-		return ISsuccess;
+		return publickey;
 	}
 }

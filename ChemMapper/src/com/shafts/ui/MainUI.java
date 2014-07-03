@@ -357,8 +357,8 @@ public class MainUI extends JFrame {
      public void initwork(){
 		LocalTree.removeAll();
 		NetTree.removeAll();
-		String localworkdir = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\localwork\\";
-		String networkdir = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\network\\";
+		String localworkdir = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\";
+		String networkdir = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\";
 		File f1 = new File(localworkdir);
 		File f2 = new File(networkdir);
 		File[] listdir1 = f1.listFiles();
@@ -394,7 +394,7 @@ public class MainUI extends JFrame {
  	 * 
  	 */
  	public void addnetnode(String node){
- 		String path = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\network\\" + node;
+ 		String path = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\" + node;
  		File file = new File(path);
  		file.mkdir();
  		DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(node);
@@ -756,7 +756,7 @@ public class MainUI extends JFrame {
 	    //System.out.println("{}{}{}}{}{{}{{}{}"+jmenuitem.getText());
 	    jmenuitem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
-				if(jmenuitem.getText().equals("请购买！")){
+				if(jmenuitem.getText().equals("请激活！")){
 					AuthorizeUI IAI = new AuthorizeUI();					
 					boolean success = IAI.getsuccess();
 					if(success){
@@ -775,7 +775,7 @@ public class MainUI extends JFrame {
 					CheckUserStatus CUS = new CheckUserStatus();
        	            IsUse = CUS.getuserstatus();
        	         if(IsUse == 0)
-       	        	 jmenuitem.setText("请购买！");       	         
+       	        	 jmenuitem.setText("请激活！");       	         
        	         else if(IsUse == 1)
        	        	 jmenuitem.setText("欢迎使用！");
        	         else
@@ -905,7 +905,7 @@ public class MainUI extends JFrame {
             	
             	Desktop desktop = Desktop.getDesktop();
             	try {
-					desktop.open(new File("E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\Readme.txt"));
+					desktop.open(new File("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\Readme.txt"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -920,7 +920,7 @@ public class MainUI extends JFrame {
             	
             	Desktop desktop = Desktop.getDesktop();
             	try {
-					desktop.open(new File("E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\SoftwareInfo.txt"));
+					desktop.open(new File("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\SoftwareInfo.txt"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1283,7 +1283,7 @@ public class MainUI extends JFrame {
         jButton6.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		JFileChooser file = new JFileChooser("E:\\MyOffice\\Eclipse\\workspace\\ChemMapper");
+        		JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
         		file.showOpenDialog(null);
         		file.setDialogTitle("请选择要打开的文件...");
         		inFilePath=file.getSelectedFile().getAbsolutePath();	 
@@ -1449,12 +1449,12 @@ public class MainUI extends JFrame {
         	  else{ 
         	     outputNum = jtextField1.getText();
         		 threshold = jtextField2.getText();
-        		 NewPath = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\localwork\\Job";
+        		 NewPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\Job";
         		 Shafts sf = new Shafts();
         		 sf.shaftinit(NewPath, inFilePath, DataBase, outputNum, threshold);
         		 String workid = sf.getworkid();
         		 addlocalnode(workid);
-        		 FilePath1 = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\localwork\\" + workid + "\\";
+        		 FilePath1 = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\" + workid + "\\";
         		 String path = NewPath + "\\Result.list";
         		 data = sf.getdata();        	
         		 Vector columnNames = IV.getcolumn();
@@ -1515,7 +1515,7 @@ public class MainUI extends JFrame {
        	      }
        	    	  
        	      else{
-        		JFileChooser fc=new JFileChooser("E:\\MyOffice\\Eclipse\\workspace\\ChemMapper");
+        		JFileChooser fc=new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
         		fc.setMultiSelectionEnabled(false);
         		int result=fc.showSaveDialog(null);
         		if (result==JFileChooser.APPROVE_OPTION){
@@ -1586,7 +1586,7 @@ public class MainUI extends JFrame {
 		panel1.add(button2);
 		button1.addActionListener(new ActionListener() {       //打开数据库文件
 			public void actionPerformed(ActionEvent e){
-				JFileChooser file = new JFileChooser("E:\\MyOffice\\Eclipse\\workspace\\ChemMapper");
+				JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
         		file.showOpenDialog(null);
         		Filepath=file.getSelectedFile().getAbsolutePath();
         		File file1=new File(Filepath);
@@ -1732,7 +1732,7 @@ public class MainUI extends JFrame {
         jButton2.addActionListener(new ActionListener() {               //打开文件按钮
         	public void actionPerformed(ActionEvent e) {
         		
-        		JFileChooser file = new JFileChooser("E:\\MyOffice\\Eclipse\\workspace\\ChemMapper");
+        		JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
         		file.showOpenDialog(null);
         		file.setDialogTitle("请选择要打开的文件...");
         		inFilePath=file.getSelectedFile().getAbsolutePath();	 
@@ -1750,7 +1750,7 @@ public class MainUI extends JFrame {
         jButton11.addActionListener(new ActionListener() {               //导出对比结果
         	public void actionPerformed(ActionEvent e) {
         		
-        		JFileChooser fc=new JFileChooser("E:\\MyOffice\\Eclipse\\workspace\\ChemMapper");
+        		JFileChooser fc=new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
         		//fc.setFileFilter(filter);
         		fc.setMultiSelectionEnabled(false);
         		int result=fc.showSaveDialog(null);
@@ -1946,9 +1946,9 @@ public class MainUI extends JFrame {
         jmolPanel2.setPreferredSize(new Dimension(400, 300));	
 	}			
 	public MainUI() {
-		localworkPath = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\localwork\\";
-		networkPath = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\network\\";
-		downloadPath = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\download\\";
+		localworkPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\";
+		networkPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\";
+		downloadPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\download\\";
 		CheckUserStatus CUS = new CheckUserStatus();
 		IsUse = CUS.getuserstatus();
 		getContentPane().setLayout(new BorderLayout());
