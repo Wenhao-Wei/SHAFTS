@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 public class CheckUserStatus {
     private Socket socket = null;
 	private String ip = "localhost";// 设置成服务器IP
+	private String userphone = null;
 	private int port = 8821;  //8821
 	private int flag; //0代表处于离线状态
 	private int leftdays;  //可使用剩余天数
@@ -54,14 +55,13 @@ public class CheckUserStatus {
 			} catch (IOException e) {
 				if (out != null)
 					out.close();
-				flag = 2;
 			}
 			try{
 				getMessageStream = new DataInputStream(new BufferedInputStream(
 						socket.getInputStream()));
 				flag = getMessageStream.readInt();				
 			}catch(Exception e){
-				flag = 2;
+				e.printStackTrace();
 			}
 		}		
 	}
@@ -72,7 +72,10 @@ public class CheckUserStatus {
 	public int getuserstatus(){
 		try {
 			checkauthorization();
-		} catch (Exception e) {flag = 2;}
+		} catch (Exception e) {
+				e.printStackTrace();
+				flag = 5;
+			}
 		return flag;
 	}
 	/**
@@ -81,8 +84,8 @@ public class CheckUserStatus {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean verify(String key) throws Exception{
-		boolean hasverified = false;
+	public String verify(String key) throws Exception{
+		String hasverified = null;
 		try{
 			connection();
 			isconnect = true;
@@ -106,7 +109,7 @@ public class CheckUserStatus {
 			try{
 				getMessageStream = new DataInputStream(new BufferedInputStream(
 						socket.getInputStream()));
-				hasverified = Boolean.valueOf(getMessageStream.readUTF());
+				hasverified = getMessageStream.readUTF();
 				}catch(Exception e){
 						e.printStackTrace();
 					}
@@ -114,10 +117,48 @@ public class CheckUserStatus {
 		return hasverified;
 	}
 	/**
+	 * renew for extend the term
+	 * @return
+	 * @throws Exception 
+	 */
+	public String renew(int money,int days) throws Exception{
+		String renewsuc = null;
+		try{
+			connection();
+			isconnect = true;
+			} catch (IOException e) {
+						isconnect = false;
+						JOptionPane.showMessageDialog( null,"连接异常！");
+						}
+		if(isconnect){
+			try {
+				out = new DataOutputStream(socket.getOutputStream());
+				getWindowsMACAddress getmac = new getWindowsMACAddress();
+				String mac = getmac.getAddress();
+				out.writeInt(5);
+				out.writeUTF(mac);
+				out.writeInt(days);
+				out.writeInt(money);
+				out.flush();
+				} catch (IOException e) {
+					if (out != null)
+						out.close();
+					}
+			try{
+				getMessageStream = new DataInputStream(new BufferedInputStream(
+						socket.getInputStream()));
+				renewsuc = getMessageStream.readUTF();
+				}catch(Exception e){
+						e.printStackTrace();
+					}
+		}
+		return renewsuc;
+	}
+	/**
 	 * check user left days
 	 * @throws Exception
 	 */
-	public void checkdays() throws Exception{
+	public void getleftdays() throws Exception{
 		try {
 			connection();
 			isconnect = true;
@@ -140,7 +181,7 @@ public class CheckUserStatus {
 			try{
 				getMessageStream = new DataInputStream(new BufferedInputStream(
 						socket.getInputStream()));
-				leftdays = getMessageStream.readInt();				
+				leftdays = getMessageStream.readInt();
 			}catch(Exception e){
 			}
 		}
@@ -151,11 +192,55 @@ public class CheckUserStatus {
 	 */
 	public int getdays(){
 		try {
-			checkdays();
+			getleftdays();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return leftdays;
+		
+	}
+	/**
+	 *get the user phone number
+	 * @return
+	 */
+	public String getuserphone(){
+		try {
+			getusertel();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userphone;
+		
+	}
+	private void getusertel() throws Exception {
+		try {
+			connection();
+			isconnect = true;
+		} catch (IOException e) {
+			isconnect = false;
+			JOptionPane.showMessageDialog( null,"连接异常！");
+		}
+		if(isconnect){
+			try {
+				out = new DataOutputStream(socket.getOutputStream());
+				getWindowsMACAddress getmac = new getWindowsMACAddress();
+				String mac = getmac.getAddress();
+				out.writeInt(6);
+				out.writeUTF(mac);
+				out.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+				if (out != null)
+					out.close();
+			}
+			try{
+				getMessageStream = new DataInputStream(new BufferedInputStream(
+						socket.getInputStream()));
+				userphone = getMessageStream.readUTF();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	/**

@@ -23,6 +23,11 @@ import javax.swing.table.TableCellRenderer;
 
 public class MyCheckBoxRenderer extends JCheckBox implements TableCellRenderer{
 
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 public MyCheckBoxRenderer(){
     setBackground(Color.red);
     setForeground(Color.yellow);

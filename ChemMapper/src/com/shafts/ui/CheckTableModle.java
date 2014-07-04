@@ -6,7 +6,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class CheckTableModle extends DefaultTableModel {
 
-    public CheckTableModle(Vector data, Vector columnNames) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public CheckTableModle(Vector data, Vector columnNames) {
         super(data, columnNames);
     }
     public boolean isCellEditable(int row,int column){         //设置第一列（复选框）可编辑

@@ -745,18 +745,22 @@ public class MainUI extends JFrame {
 	    jMenuBar1.add(jmenu);
 	    }
 	    switch(IsUse){
-	    case 0: jmenuitem.setText("请购买！");
-	            break;
-	    case 1: jmenuitem.setText("欢迎使用！");
-                break;
-	    default:jmenuitem.setText("离线！");
-                break;
+	    	case 0: jmenuitem.setText("解锁");
+	            	break;
+	    	case 1: jmenuitem.setText("欢迎使用！");
+                	break;
+	    	case 2: jmenuitem.setText("续费");
+        			break;
+	    	case 3:	jmenuitem.setText("服务器错误！");
+        			break;
+	    	default:jmenuitem.setText("离线！");
+                	break;
 	    }
 	    jMenuBar1.add(jmenuitem);
 	    //System.out.println("{}{}{}}{}{{}{{}{}"+jmenuitem.getText());
 	    jmenuitem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
-				if(jmenuitem.getText().equals("请激活！")){
+				if(jmenuitem.getText().equals("解锁")||jmenuitem.getText().equals("续费")){
 					AuthorizeUI IAI = new AuthorizeUI();					
 					boolean success = IAI.getsuccess();
 					if(success){
@@ -769,15 +773,20 @@ public class MainUI extends JFrame {
 				else if(jmenuitem.getText().equals("欢迎使用！")){
 					CheckUserStatus CUS = new CheckUserStatus();
         	        int days = CUS.getdays();
-    				JOptionPane.showMessageDialog(null, "您好！您还可以使用" + days + "天！");
+    				int i = JOptionPane.showConfirmDialog(null, "您好！您还可以使用" + days + "天！\n            是否续费？");
+    				if(i == JOptionPane.OK_OPTION){
+    					AuthorizeUI IAI = new AuthorizeUI();
+    				}
 				}
-				else if(jmenuitem.getText().equals("离线！")){
+				else if(jmenuitem.getText().equals("离线！")||jmenuitem.getText().equals("服务器错误！")){
 					CheckUserStatus CUS = new CheckUserStatus();
        	            IsUse = CUS.getuserstatus();
        	         if(IsUse == 0)
-       	        	 jmenuitem.setText("请激活！");       	         
+       	        	 jmenuitem.setText("解锁");       	         
        	         else if(IsUse == 1)
        	        	 jmenuitem.setText("欢迎使用！");
+       	         else if(IsUse == 2)
+    	        	 jmenuitem.setText("续费");
        	         else
        	        	JOptionPane.showMessageDialog(null, "服务器正在维护！");
 			  }				
