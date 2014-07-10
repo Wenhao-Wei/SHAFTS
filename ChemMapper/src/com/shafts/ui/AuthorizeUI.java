@@ -12,7 +12,11 @@ import java.io.FileWriter;
 import javax.swing.*;
 
 import com.shafts.utils.CheckUserStatus;
-
+/**
+ * Authorize application
+ * @author Wenhao Wei
+ * 2014-07-02
+ */
 public class AuthorizeUI extends JDialog{
 	/**
 	 * 

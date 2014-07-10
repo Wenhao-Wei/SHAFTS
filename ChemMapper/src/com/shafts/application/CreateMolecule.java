@@ -5,8 +5,8 @@
 package com.shafts.application;
 
 /**
- *
- * @author chin
+ *	format conversion
+ * @author wenhao wei
  */
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent; 

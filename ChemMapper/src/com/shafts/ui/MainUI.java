@@ -36,6 +36,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.birosoft.liquid.LiquidLookAndFeel;
 import com.shafts.application.CreateMolecule;
+import com.shafts.application.FormatConv;
 import com.shafts.application.Shafts;
 import com.shafts.utils.CheckUserStatus;
 //import com.shafts.application.CreateMolecule.RenderThread;
@@ -109,7 +110,7 @@ public class MainUI extends JFrame {
 		JMenuItem menuitem1 = new JMenuItem();
 		JMenuItem menuitem2 = new JMenuItem();
 		JMenuItem menuitem3 = new JMenuItem();
-		menuitem1.setText("重命名");
+		menuitem1.setText("Rename");
 		menuitem1.addActionListener(new ActionListener() { //菜单1的事件监听
 			public void actionPerformed(ActionEvent e) {
 			 //菜单事件函数	
@@ -124,7 +125,7 @@ public class MainUI extends JFrame {
 				//LocalTree.startEditingAtPath(path);
 			}
 			});
-		menuitem2.setText("打开目录");
+		menuitem2.setText("Open In Explorer ");
 		menuitem2.addActionListener(new ActionListener() { //菜单2的事件监听
 			public void actionPerformed(ActionEvent e) {
 			 //菜单事件函数
@@ -138,13 +139,13 @@ public class MainUI extends JFrame {
 				}
 			  }
 			});
-		menuitem3.setText("删除");
+		menuitem3.setText("Delete");
 		menuitem3.addActionListener(new ActionListener() { //菜单3的事件监听
 			public void actionPerformed(ActionEvent e) {
 			 //菜单事件函数  
 				 String filepath = localworkPath + nodeName; 
 				 //System.out.println(filepath);
-				 int i=JOptionPane.showConfirmDialog(null, "删除之后不可恢复，确认要删除吗？","删除", JOptionPane.YES_NO_OPTION);  
+				 int i=JOptionPane.showConfirmDialog(null, "Cannot be retrieved after deletion!Are you sure to delete it？","Delete", JOptionPane.YES_NO_OPTION);  
 				 if(i==JOptionPane.OK_OPTION)
 				 {   
 					 File file = new File(filepath);
@@ -161,7 +162,7 @@ public class MainUI extends JFrame {
 						 }
 						 
 					 }catch(Exception e1){
-						 JOptionPane.showMessageDialog( null,"删除失败！");
+						 JOptionPane.showMessageDialog( null,"Failed！");
 					 }
 					 dellocalnode((DefaultMutableTreeNode) treenode);
 					 }
@@ -179,7 +180,7 @@ public class MainUI extends JFrame {
 		JMenuItem menuitem1 = new JMenuItem();
 		JMenuItem menuitem2 = new JMenuItem();
 		JMenuItem menuitem3 = new JMenuItem();
-		menuitem1.setText("重命名");
+		menuitem1.setText("Rename");
 		menuitem1.addActionListener(new ActionListener() { //菜单1的事件监听
 			public void actionPerformed(ActionEvent e) {
 			 //菜单事件函数
@@ -194,7 +195,7 @@ public class MainUI extends JFrame {
 				//NetTree.startEditingAtPath(path);
 			  }
 			});
-		menuitem2.setText("打开目录");
+		menuitem2.setText("Open In Explorer");
 		menuitem2.addActionListener(new ActionListener() { //菜单1的事件监听
 			public void actionPerformed(ActionEvent e) {
 			 //菜单事件函数
@@ -208,13 +209,13 @@ public class MainUI extends JFrame {
 				}
 			  }
 			});
-		menuitem3.setText("删除");
+		menuitem3.setText("Delete");
 		menuitem3.addActionListener(new ActionListener() { //菜单1的事件监听
 			public void actionPerformed(ActionEvent e) {
 			 //菜单事件函数  
 				 String filepath = networkPath + nodeName;
 				// System.out.println(filepath);
-				 int i=JOptionPane.showConfirmDialog(null, "删除之后不可恢复，确认要删除吗？","删除", JOptionPane.YES_NO_OPTION);  
+				 int i=JOptionPane.showConfirmDialog(null, "Cannot be retrieved after deletion!Are you sure to delete it？","Delete", JOptionPane.YES_NO_OPTION);  
 				 if(i==JOptionPane.OK_OPTION)
 				 {   
 					 File file = new File(filepath);
@@ -230,7 +231,7 @@ public class MainUI extends JFrame {
 							     nodeName = null;
 						 }						 
 					 }catch(Exception e1){
-						 JOptionPane.showMessageDialog( null,"删除失败！");
+						 JOptionPane.showMessageDialog( null,"Failed！");
 					 }
 					 delnetnode((DefaultMutableTreeNode) treenode);
 					 
@@ -280,7 +281,7 @@ public class MainUI extends JFrame {
     String model1;
 	String model2;
 	int model; 
-	//格式转换	
+	/*//格式转换	
 	public void formatconv()
 	{
 	       System.loadLibrary("openbabel_java");
@@ -293,63 +294,15 @@ public class MainUI extends JFrame {
 	       conv.ReadFile(mol, inFilePath);	  
 	       conv.SetOutFormat(outFormat);
 	       conv.WriteFile(mol, outFilePath);
-	       JOptionPane.showMessageDialog( null,"转换成功！");
+	       JOptionPane.showMessageDialog( null,"Convert Success！");
 	       }catch(Exception e){
-	    	   JOptionPane.showMessageDialog( null,"转换失败，请重试！");
+	    	   JOptionPane.showMessageDialog( null,"Failed，please retry！");
 	       }
 	       	       
 	        // conv.WriteString(mol);	      
 	   }
+	   */
 		
-/*	 //相似性比对算法
-	public void shaftinit(){		    
-			outputNum = jtextField1.getText();
-			threshold = jtextField2.getText();
-				 String cmd = "Cynthia.exe -q "+inFilePath+ " -t "+ DataBase +" -n "+outputNum+" -sCutoff "+threshold;
-				 InputStream ins = null;
-			 try {
-				 Process process = Runtime.getRuntime().exec(cmd);
-	             ins = process.getInputStream(); //cmd 的信息	             
-	             BufferedReader reader = new BufferedReader(new InputStreamReader(ins));   
-	             String line = null;   
-	             while ((line = reader.readLine()) != null) {   
-	                    System.out.println(line);  //输出 
-	                } 	                
-	             int exitValue = process.waitFor();   
-	             System.out.println("返回值：" + exitValue);  
-	             process.getOutputStream().close(); //不要忘记了一定要关
-			    
-	             
-	        } catch (Exception e) {            
-	            e.printStackTrace();
-	        }
-			 try{
-			    int i = 1;
-			    String j = i + "";
-			    NewPath = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\localwork\\Job" + j;
-	            File F1 = new File(NewPath);
-			    while(F1.exists()){
-			    	i++;
-			    	j = i + "";
-			    	NewPath = "E:\\MyOffice\\Eclipse\\workspace\\ChemMapper\\workhome\\localwork\\Job" + j;
-			    	F1 = new File(NewPath);
-			    }
-			  F1.mkdir();			    	            
-	          File F2 = new File("Result.list");
-	          FileInputStream  input  =  new  FileInputStream(F2);  
-              FileOutputStream  output  =  new  FileOutputStream(NewPath  +  "/" + F2.getName().toString());  
-              byte[]  b  =  new  byte[1024  *  5];  
-              int  len;  
-              while  (  (len  =  input.read(b))  !=  -1)  {  
-                  output.write(b,  0,  len);  
-              }  
-              output.flush();  
-              output.close();  
-              input.close();
-              F2.delete();
-              addlocalnode("Job" + j);
-			 }catch(IOException ioe){ioe.printStackTrace();}
-	}*/
 	/**
 	 * 初始化作业树
 	 *
@@ -357,10 +310,10 @@ public class MainUI extends JFrame {
      public void initwork(){
 		LocalTree.removeAll();
 		NetTree.removeAll();
-		String localworkdir = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\";
-		String networkdir = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\";
-		File f1 = new File(localworkdir);
-		File f2 = new File(networkdir);
+		//String localworkdir = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\";
+		//String networkdir = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\";
+		File f1 = new File(localworkPath);
+		File f2 = new File(networkPath);
 		File[] listdir1 = f1.listFiles();
 		File[] listdir2 = f2.listFiles();
 		for(int i = 0; i<listdir1.length; i++){
@@ -394,7 +347,8 @@ public class MainUI extends JFrame {
  	 * 
  	 */
  	public void addnetnode(String node){
- 		String path = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\" + node;
+ 		//String path = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\" + node;
+ 		String path = networkPath + node;
  		File file = new File(path);
  		file.mkdir();
  		DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(node);
@@ -671,7 +625,7 @@ public class MainUI extends JFrame {
 						F = false;
 					}
                 	//System.out.println(flag);
-                	if (nodeName == null || nodeName == "本地任务")
+                	if (nodeName == null || nodeName == "Local Job")
 				    	F = false;
                 	if(F){
                 		setlocalpop();
@@ -688,7 +642,7 @@ public class MainUI extends JFrame {
 					          TreeNode treenode = (TreeNode)treepath.getLastPathComponent();
 					          nodeName = treenode.toString();
 				            }catch(NullPointerException ne){}
-				  if(!nodeName.equals("本地任务")){
+				  if(!nodeName.equals("Local Job")){
 					 FilePath1 = localworkPath + nodeName + "\\";
 					 String name = new ListFinder(FilePath1).GetList(FilePath1);				
 	                 String path = FilePath1 + name;
@@ -728,39 +682,40 @@ public class MainUI extends JFrame {
 		jMenu8 = new JMenu();
 		jMenu9 = new JMenu();
 		jmenuitem = new JMenuItem();
-		jMenu1.setText("  		文件			");
+		jMenu1.setText("  		File			");
 		jMenuBar1.add(jMenu1);
-	    jMenu2.setText("  		功能 		");
+	    jMenu2.setText("  		Tools 		");
 	    jMenuBar1.add(jMenu2);
-	    jMenu3.setText("  		查看 		");
+	    jMenu3.setText("  		Molecule 		");
 	    jMenuBar1.add(jMenu3);
-	    jMenu4.setText("  		帮助  		");
+	    jMenu4.setText("  		Setting  		");
 	    jMenuBar1.add(jMenu4);
-	    jMenu5.setText("  		档案  		");
+	    jMenu5.setText("  		Help  		");
 	    jMenuBar1.add(jMenu5);
-	    jMenu6.setText("  		Jmol  		");
-	    for(int i = 1;i<12;i++){
+	    jMenu6.setText("  		About...  		");
+	    jMenuBar1.add(jMenu6);
+	    for(int i = 1;i<10;i++){
 	    jmenu = new JMenu("                            ");
 	    jmenu.setEnabled(false);
 	    jMenuBar1.add(jmenu);
 	    }
 	    switch(IsUse){
-	    	case 0: jmenuitem.setText("解锁");
+	    	case 0: jmenuitem.setText("Active please");
 	            	break;
-	    	case 1: jmenuitem.setText("欢迎使用！");
+	    	case 1: jmenuitem.setText("Welcome！");
                 	break;
-	    	case 2: jmenuitem.setText("续费");
+	    	case 2: jmenuitem.setText("Overdue");
         			break;
-	    	case 3:	jmenuitem.setText("服务器错误！");
+	    	case 3:	jmenuitem.setText("Server 	Error！");
         			break;
-	    	default:jmenuitem.setText("离线！");
+	    	default:jmenuitem.setText("Off line！");
                 	break;
 	    }
 	    jMenuBar1.add(jmenuitem);
 	    //System.out.println("{}{}{}}{}{{}{{}{}"+jmenuitem.getText());
 	    jmenuitem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
-				if(jmenuitem.getText().equals("解锁")||jmenuitem.getText().equals("续费")){
+				if(jmenuitem.getText().equals("Active please")||jmenuitem.getText().equals("Overdue")){
 					AuthorizeUI IAI = new AuthorizeUI();					
 					boolean success = IAI.getsuccess();
 					if(success){
@@ -770,34 +725,34 @@ public class MainUI extends JFrame {
 				    	//jMenuBar1.updateUI();
 				    }
 				}
-				else if(jmenuitem.getText().equals("欢迎使用！")){
+				else if(jmenuitem.getText().equals("Welcome！")){
 					CheckUserStatus CUS = new CheckUserStatus();
         	        int days = CUS.getdays();
-    				int i = JOptionPane.showConfirmDialog(null, "您好！您还可以使用" + days + "天！\n            是否续费？");
+    				int i = JOptionPane.showConfirmDialog(null, "Dear user! You can still enjoy the SHAFTS for " + days + " days！\n            Do you want to extend the use date？");
     				if(i == JOptionPane.OK_OPTION){
     					AuthorizeUI IAI = new AuthorizeUI();
     				}
 				}
-				else if(jmenuitem.getText().equals("离线！")||jmenuitem.getText().equals("服务器错误！")){
+				else if(jmenuitem.getText().equals("Off line！")||jmenuitem.getText().equals("Server Error！")){
 					CheckUserStatus CUS = new CheckUserStatus();
        	            IsUse = CUS.getuserstatus();
        	         if(IsUse == 0)
-       	        	 jmenuitem.setText("解锁");       	         
+       	        	 jmenuitem.setText("Active please!");       	         
        	         else if(IsUse == 1)
-       	        	 jmenuitem.setText("欢迎使用！");
+       	        	 jmenuitem.setText("Welcome！");
        	         else if(IsUse == 2)
-    	        	 jmenuitem.setText("续费");
+    	        	 jmenuitem.setText("Overdue");
        	         else
-       	        	JOptionPane.showMessageDialog(null, "服务器正在维护！");
+       	        	JOptionPane.showMessageDialog(null, "Sorry! The server is under maintenance！");
 			  }				
 			}
 		});
-	    jMenu7.setText("  分子显示  ");
-	    jMenu8.setText("  背景色  ");
-	    jMenu9.setText("  旋转  ");
-	    jMenu6.add(jMenu7);
-	    jMenu6.add(jMenu8);
-	    jMenu6.add(jMenu9);	    	    	    
+	    jMenu7.setText("  Surface  ");
+	    jMenu8.setText("  Background  ");
+	    jMenu9.setText("  Spin  ");
+	    jMenu3.add(jMenu7);
+	    jMenu3.add(jMenu8);
+	    jMenu3.add(jMenu9);	    	    	    
 	    jMenuItem1 = new JMenuItem();
         jMenuItem2 = new JMenuItem();
         jMenuItem3 = new JMenuItem();
@@ -836,7 +791,7 @@ public class MainUI extends JFrame {
         jMenuItem36 = new JMenuItem();
         jMenuItem37 = new JMenuItem();
                              
-        jMenuItem1.setText("	新建2D-3D编辑	");
+        jMenuItem1.setText("	Open File...	");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createMolecule = new CreateMolecule();
@@ -848,7 +803,7 @@ public class MainUI extends JFrame {
         });
         jMenu1.add(jMenuItem1);
         
-        jMenuItem3.setText("	新建2D编辑	");
+        jMenuItem3.setText("	New Create	");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcpui = new JcpUI();
@@ -859,7 +814,7 @@ public class MainUI extends JFrame {
         });
         jMenu1.add(jMenuItem3);
        
-        jMenuItem2.setText("	退出		");
+        jMenuItem2.setText("	Exit		");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -867,27 +822,27 @@ public class MainUI extends JFrame {
         });
         jMenu1.add(jMenuItem2);
                
-        jMenuItem4.setText("	格式转换...	");
+        jMenuItem4.setText("	Formate Convert	");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	
-            	FormatConv formatconv = new FormatConv();
-            	formatconv.setVisible(true);//格式转换           	            	
+            	FormatConvUI formatconv = new FormatConvUI();
+            	//formatconv.setVisible(true);//格式转换           	            	
             }
         });
         jMenu2.add(jMenuItem4);
                
-        jMenuItem5.setText("	相似性比对...	");
+        jMenuItem5.setText("	need remove...	");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
      		
-                 		similarityStart start = new similarityStart();
-                 		start.setVisible(true);
+                 		//similarityStart start = new similarityStart();
+                 		//start.setVisible(true);
             }
         });
         jMenu2.add(jMenuItem5);
                 
-        jMenuItem6.setText("	2D显示...	 ");
+        jMenuItem6.setText("	Set Your Workspace...	 ");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcpui = new JcpUI();
@@ -896,50 +851,35 @@ public class MainUI extends JFrame {
         		TThread.start();
             }
         });
-        jMenu3.add(jMenuItem6);
+        jMenu4.add(jMenuItem6);
                
-        jMenuItem7.setText("	3D显示...	 ");
+        jMenuItem7.setText("	Check your info...	 ");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	
-            	Viewin3D viewer = new Viewin3D();
-            	viewer.setVisible(true);                      	
+            	//Viewin3D viewer = new Viewin3D();
+            	//viewer.setVisible(true);                      	
             }
         });
-        jMenu3.add(jMenuItem7);
-                       
-        jMenuItem9.setText("	使用说明	 ");
+        jMenu4.add(jMenuItem7);
+        
+        jMenuItem9.setText("	SHAFTS Help	 ");
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	
             	Desktop desktop = Desktop.getDesktop();
             	try {
-					desktop.open(new File("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\Readme.txt"));
+					desktop.open(new File("Readme.txt"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}         	
             }
         });
-        jMenu4.add(jMenuItem9);
-        
-        jMenuItem10.setText("	软件信息	 ");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	
-            	Desktop desktop = Desktop.getDesktop();
-            	try {
-					desktop.open(new File("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\SoftwareInfo.txt"));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}          	
-            }
-        });
-        jMenu4.add(jMenuItem10);
+        jMenu5.add(jMenuItem9);                
 
-        jMenuItem11.setText("	导出GIF图像	 ");
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem10.setText("	Userconfig	 ");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	
             	if(inFilePath == null)
@@ -950,7 +890,22 @@ public class MainUI extends JFrame {
             	}           	
             }
         });
-        jMenu5.add(jMenuItem11);
+        jMenu5.add(jMenuItem10);
+        
+        jMenuItem11.setText("	About US...	 ");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	
+            	Desktop desktop = Desktop.getDesktop();
+            	try {
+					desktop.open(new File("SoftwareInfo.txt"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}          	
+            }
+        });
+        jMenu6.add(jMenuItem11);
         
         jMenuItem12.setText("	导出jpg图像	 ");
         jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
@@ -979,8 +934,10 @@ public class MainUI extends JFrame {
             }
         });
         jMenu5.add(jMenuItem13);
-        
-        jMenuItem26.setText("	斑点表面	");
+        /**
+         * *******************set the molecule surface ***************************
+         * **/
+        jMenuItem26.setText("	Dot Surface	");
         jMenuItem26.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "dots on";
@@ -989,7 +946,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem26);
         
-        jMenuItem27.setText("	凡德瓦表面	");
+        jMenuItem27.setText("	van der Waals Surface	");
         jMenuItem27.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "isosurface delete resolution 0 solvent 0 translucent";
@@ -998,7 +955,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem27);
         
-        jMenuItem28.setText("	分子表面	");
+        jMenuItem28.setText("	Molecular Surface	");
         jMenuItem28.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "isosurface delete resolution 0 molecular translucent";
@@ -1007,7 +964,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem28);
         
-        jMenuItem29.setText("	溶剂表面 (1.4A的探针)	");
+        jMenuItem29.setText("	Solvent Surface(1.4-Angstrom probe)	");
         jMenuItem29.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "isosurface delete resolution 0 solvent 1.4 translucent";
@@ -1016,7 +973,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem29);
         
-        jMenuItem30.setText("	 溶剂可及表面 (范德华表面 +1.4A)	");
+        jMenuItem30.setText("	 Solvent-Accessible Surface(VDW + 1.4 Angstrom)	");
         jMenuItem30.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "isosurface delete resolution 0 sasurface 1.4 translucent";
@@ -1025,7 +982,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem30);
         
-        jMenuItem31.setText("	分子静电位能	");
+        jMenuItem31.setText("	Molcular Electrostatic Potential	");
         jMenuItem31.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "isosurface delete resolution 0 vdw color range all map MEP translucent";
@@ -1034,7 +991,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem31);
         
-        jMenuItem32.setText("	不透明效果	");
+        jMenuItem32.setText("	Make Opaque	");
         jMenuItem32.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "mo opaque;isosurface opaque";
@@ -1043,7 +1000,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem32);
         
-        jMenuItem33.setText("	半透明效果	");
+        jMenuItem33.setText("	Make Translucent	");
         jMenuItem33.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "mo translucent;isosurface translucent";
@@ -1052,7 +1009,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem33);
         
-        jMenuItem34.setText("	关闭	");
+        jMenuItem34.setText("	Off	");
         jMenuItem34.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "mo delete;isosurface delete;select *;dots off";
@@ -1061,7 +1018,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu7.add(jMenuItem34);
 
-        jMenuItem16.setText("	白色	");
+        jMenuItem16.setText("	White	");
         jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("white");
@@ -1070,7 +1027,7 @@ public class MainUI extends JFrame {
         }); 
         jMenu8.add(jMenuItem16);
         
-        jMenuItem17.setText("	黑色	");
+        jMenuItem17.setText("	Black	");
         jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("black");
@@ -1079,7 +1036,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem17);
         
-        jMenuItem18.setText("	红色	");
+        jMenuItem18.setText("	Red	");
         jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("red");
@@ -1088,7 +1045,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem18);
         
-        jMenuItem19.setText("	橘色	");
+        jMenuItem19.setText("	Orange	");
         jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("orange");
@@ -1097,7 +1054,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem19);
         
-        jMenuItem20.setText("	黄色	");
+        jMenuItem20.setText("	Yellow	");
         jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("yellow");
@@ -1106,7 +1063,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem20);
         
-        jMenuItem21.setText("	绿色	");
+        jMenuItem21.setText("	Green	");
         jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("green");
@@ -1115,7 +1072,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem21);
         
-        jMenuItem22.setText("	蓝绿色	");
+        jMenuItem22.setText("	Cyan	");
         jMenuItem22.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("cyan");
@@ -1124,7 +1081,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem22);
         
-        jMenuItem23.setText("	蓝色	");
+        jMenuItem23.setText("	Blue	");
         jMenuItem23.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("blue");
@@ -1133,7 +1090,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem23);
         
-        jMenuItem24.setText("	靛蓝	");
+        jMenuItem24.setText("	Indigo	");
         jMenuItem24.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("indigo");
@@ -1142,7 +1099,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem24);
         
-        jMenuItem25.setText("	紫色	");
+        jMenuItem25.setText("	Violet	");
         jMenuItem25.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmolPanel2.viewer.setColorBackground("violet");
@@ -1151,7 +1108,7 @@ public class MainUI extends JFrame {
         });
         jMenu8.add(jMenuItem25);
         
-        jMenuItem35.setText("	开启	");
+        jMenuItem35.setText("	On	");
         jMenuItem35.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "spin on";
@@ -1160,7 +1117,7 @@ public class MainUI extends JFrame {
         });
         jMenu9.add(jMenuItem35);
         
-        jMenuItem36.setText("	关闭	");
+        jMenuItem36.setText("	Off	");
         jMenuItem36.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "spin off";
@@ -1169,7 +1126,7 @@ public class MainUI extends JFrame {
         });
         jMenu9.add(jMenuItem36);
         
-        jMenuItem37.setText("	复位	");
+        jMenuItem37.setText("	Reset	");
         jMenuItem37.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String controller = "spin off";
@@ -1347,8 +1304,8 @@ public class MainUI extends JFrame {
         jButton8.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		FormatConv formatconv = new FormatConv();
-        		formatconv.setVisible(true);
+        		FormatConvUI formatconv = new FormatConvUI();
+        		//formatconv.setVisible(true);
         		}
         	}
         );                    
@@ -1375,8 +1332,8 @@ public class MainUI extends JFrame {
         jButton9.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		similarityStart start = new similarityStart();
-        		start.setVisible(true);
+        		//similarityStart start = new similarityStart();
+        		//start.setVisible(true);
         		}
         	}
         );
@@ -1517,7 +1474,7 @@ public class MainUI extends JFrame {
 		jPanel1.add(jLabel12);
 		jPanel1.add(jComboBox2);
 		jPanel1.add(hbox1);		
-        jButton3.addActionListener(new ActionListener() {                           //开始转换按钮
+    /*    jButton3.addActionListener(new ActionListener() {                           //开始转换按钮
         	public void actionPerformed(ActionEvent e) {        		
         	if(inFilePath==null){
        	    	  JOptionPane.showMessageDialog( null,"错误！请选择文件！");
@@ -1543,7 +1500,7 @@ public class MainUI extends JFrame {
         		
         		}
         	});  
-         
+         */
         /**
          * 选项卡二： 数据库选择              
          */ 
@@ -1759,7 +1716,8 @@ public class MainUI extends JFrame {
         jButton11.addActionListener(new ActionListener() {               //导出对比结果
         	public void actionPerformed(ActionEvent e) {
         		
-        		JFileChooser fc=new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
+        		new ExportXlsUI(jTable1);
+        		/*JFileChooser fc=new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
         		//fc.setFileFilter(filter);
         		fc.setMultiSelectionEnabled(false);
         		int result=fc.showSaveDialog(null);
@@ -1833,7 +1791,7 @@ public class MainUI extends JFrame {
                      {
                      t.printStackTrace();
                      }
-        		}
+        		}*/
            }       	      
          });
         
@@ -1959,7 +1917,7 @@ public class MainUI extends JFrame {
 		networkPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\";
 		downloadPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\download\\";
 		CheckUserStatus CUS = new CheckUserStatus();
-		IsUse = CUS.getuserstatus();
+		IsUse = 1;//CUS.getuserstatus();
 		getContentPane().setLayout(new BorderLayout());
 		setLocation(5, 5);
 		setSize(1200,700);
