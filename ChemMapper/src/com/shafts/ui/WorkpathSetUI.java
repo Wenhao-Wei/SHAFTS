@@ -23,8 +23,8 @@ public class WorkpathSetUI extends JDialog{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final int WIDTH = 650;
-	private final int HEIGHT = 350;
+	private final int WIDTH = 480;
+	private final int HEIGHT = 300;
 	private JEditorPane description;
 	private JLabel title;
 	private JLabel workspace;
@@ -33,7 +33,7 @@ public class WorkpathSetUI extends JDialog{
 	private JButton browse;
 	private JButton OK;
 	private JButton Cancel;
-	private JPanel north;
+	private JPanel childPanel;
 	private JPanel south;
 	private JPanel center;
 	private JPanel buttonField;
@@ -51,103 +51,32 @@ public class WorkpathSetUI extends JDialog{
      	setLocation(x-50, y-100);
      	setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
      	setSize(WIDTH, HEIGHT);
+     	setResizable(false);
      	centerpanel center= new centerpanel();
-     	add(center);
-     	setVisible(true); 
-     	//setLayout(new GridLayout(3,1,10,10));
-     	/*	north = new JPanel(new GridLayout(1,2));     	
-     	//title = new JLabel("Select a workspace");
-     	//title.setBackground(Color.WHITE);
-     	String str = "Select a workspace \n \nSHAFTS stores your job in a folder called workspace \nPlease set your workplace folder";
-     	description = new JEditorPane("text/plain",str);	
-     	description.setEditable(false);
-     	workspace = new JLabel("Workspace:");
-     	workspace.setBounds(0, 0, 15, 5);
-     	field = new JTextField(25);
-     	field.setText(defaultpath + "\\workspace");
-     	browse = new JButton("Browse");
-     	north.add(field);
-     	north.add(browse);
-     	center = new JPanel(new GridLayout(3,1,10,10));
-     	//centerpanel east= new centerpanel();
-     	center.add(workspace);
-     	
-     	center.add(north);
-     	
-     	south = new JPanel(new GridLayout(1,2,10,10));
-     	rButton = new JRadioButton("Use this as the default and don't ask again");
-     	center.add(rButton);
-     	buttonField = new JPanel(new GridLayout(1,2,10,10));
-     	buttonField.setBorder(new EmptyBorder(10, 10, 10, 10)); 
-     	Cancel = new JButton("Cancel");
-     	OK = new JButton("     OK     ");
-     	buttonField.add(Cancel);
-     	buttonField.add(OK);
-     	//south.add(rButton);
-     	//south.add(new JLabel());
-     	south.add(new JLabel());
-     	south.add(buttonField);
-     	add(description,BorderLayout.NORTH);
-     	add(center,BorderLayout.CENTER);
-     	add(south,BorderLayout.SOUTH);
-     	setVisible(true);     	
-     	Cancel.addActionListener(new ActionListener(){
-     		public void actionPerformed(ActionEvent e){
-     			dispose();
-     		}
-     	});
-     	OK.addActionListener(new ActionListener(){
-     		public void actionPerformed(ActionEvent e){
-     			String flag = "NO";
-     			String path = field.getText();
-     			if(rButton.isSelected())
-     				flag = "YES";
-     			else flag = "NO";
-     			PropertyConfig PC = new PropertyConfig();
-     			PC.createProperties(flag, path);     			
-     		}
-     	});
-     	workspace = new JLabel("Workspace:");
-     	defaultpath = System.getProperty("user.dir");
-     	field = new JTextField(25);
-     	field.setText(defaultpath + "workspace");
-     	browse = new JButton("Browse");
-     	String str = "Select a workspace \n \nSHAFTS stores your job in a folder called workspace \nPlease set your workplace folder";
-     	description = new JEditorPane("text/plain",str);	
-     	description.setEditable(false);
-     	center = new JPanel(new GridLayout(1,3,10,10));
-     	south = new JPanel(new GridLayout(2,2,10,10));
+     	center.setBorder(new EmptyBorder(20,0,0,0));
+     	south = new JPanel(new GridLayout(2,1,10,10));
      	rButton = new JRadioButton("Use this as the default and don't ask again");
      	buttonField = new JPanel(new GridLayout(1,2,10,10));
+     	buttonField.setBorder(new EmptyBorder(0, 0, 10, 10));
      	Cancel = new JButton("Cancel");
      	OK = new JButton("OK");
      	buttonField.add(Cancel);
      	buttonField.add(OK);
-     	center.add(workspace);
-     	center.add(field);
-     	center.add(browse);
+     	childPanel = new JPanel(new GridLayout(1,2,10,10));
      	south.add(rButton);
-     	south.add(new JLabel());
-     	south.add(new JLabel());
-     	south.add(buttonField);
+     	
+     	//childPanel.add(new JLabel());
+     	childPanel.add(new JLabel());
+     	childPanel.add(buttonField);
+     	south.add(rButton);
+     	south.add(childPanel);
+     	String str = "Select a workspace \n \nSHAFTS stores your job in a folder called workspace \nPlease set your workplace folder";
+     	description = new JEditorPane("text/plain",str);	
+     	description.setEditable(false);
      	add(description,BorderLayout.NORTH);
      	add(center,BorderLayout.CENTER);
      	add(south,BorderLayout.SOUTH);
-     	setVisible(true);
-     	browse.addActionListener(new ActionListener(){
-     		public void actionPerformed(ActionEvent e){
-     			String workpath = null;
-     			JFileChooser fc=new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
-    			fc.setMultiSelectionEnabled(false);
-    			int result=fc.showSaveDialog(null);
-    			if (result==JFileChooser.APPROVE_OPTION){
-    				File file=fc.getSelectedFile();
-    				workpath = file.getAbsolutePath();
-    			}
-    			workpath = workpath + "workspace";
-    			field.setText(workpath);
-     		}
-     	});
+     	     	
      	Cancel.addActionListener(new ActionListener(){
      		public void actionPerformed(ActionEvent e){
      			dispose();
@@ -164,8 +93,8 @@ public class WorkpathSetUI extends JDialog{
      			PC.createProperties(flag, path);
      			dispose();
      		}
-     	});*/
-     	
+     	}); 
+     	setVisible(true);
 	}
 	class centerpanel extends JPanel{
 		
@@ -181,62 +110,34 @@ public class WorkpathSetUI extends JDialog{
 			add(c,constraints);
 		}
 		public centerpanel(){
-			String str = "Select a workspace \n \nSHAFTS stores your job in a folder called workspace \nPlease set your workplace folder";
-	     	description = new JEditorPane("text/plain",str);	
-	     	description.setEditable(false);
-	     	workspace = new JLabel("Workspace:");
-	     	//workspace.setBounds(0, 0, 15, 5);
+	     	workspace = new JLabel("Workspace:   ");
 	     	field = new JTextField();
-	     	field.setText(defaultpath + "\\workspace");
-	     	//browse = new JButton("Browse");
-			//workspace = new JLabel("Workspace");
+	     	
 	     	defaultpath = System.getProperty("user.dir");
-	     	field = new JTextField();
-	     	field.setText(defaultpath + "workspace");
-	     	rButton = new JRadioButton("Use this as the default and don't ask again");
+	     	field.setText(defaultpath + "\\workspace");
 	     	browse = new JButton("Browse");
-	     	Cancel = new JButton("Cancel");
-	     	OK = new JButton("OK");
 			GridBagConstraints constraints = new GridBagConstraints();
 	     	constraints.fill = GridBagConstraints.NONE;
 	     	constraints.anchor = GridBagConstraints.WEST;
-	     	constraints.weightx = 4;
-	     	constraints.weighty = 4;
-	     	add(description, constraints,0,0,4,1);
-	     	add(workspace, constraints,0,1,1,1);
-	     	add(field, constraints,1,1,2,1);
-	     	add(browse, constraints,3,1,1,1);
-	     	add(rButton, constraints,0,2,4,1);
-	     	add(Cancel, constraints,2,3,1,1);
-	     	add(OK, constraints,3,3,1,1);
+	     	constraints.weightx = 3;
+	     	constraints.weighty = 3;
+	     	add(workspace, constraints,0,0,1,1);
+	     	add(field, constraints,1,0,1,1);
+	     	add(browse, constraints,2,0,1,1);	     	
 	     	browse.addActionListener(new ActionListener(){
 	     		public void actionPerformed(ActionEvent e){
 	     			String workpath = null;
 	     			JFileChooser fc=new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
+	     			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 	    			fc.setMultiSelectionEnabled(false);
 	    			int result=fc.showSaveDialog(null);
 	    			if (result==JFileChooser.APPROVE_OPTION){
 	    				File file=fc.getSelectedFile();
 	    				workpath = file.getAbsolutePath();
+	    				workpath = workpath + "workspace";
+		    			field.setText(workpath);
 	    			}
-	    			workpath = workpath + "workspace";
-	    			field.setText(workpath);
-	     		}
-	     	});
-	     	Cancel.addActionListener(new ActionListener(){
-	     		public void actionPerformed(ActionEvent e){
-	     			dispose();
-	     		}
-	     	});
-	     	OK.addActionListener(new ActionListener(){
-	     		public void actionPerformed(ActionEvent e){
-	     			String flag = "NO";
-	     			String path = field.getText();
-	     			if(rButton.isSelected())
-	     				flag = "YES";
-	     			else flag = "NO";
-	     			PropertyConfig PC = new PropertyConfig();
-	     			PC.createProperties(flag, path);     			
+	    			
 	     		}
 	     	});
 		}
