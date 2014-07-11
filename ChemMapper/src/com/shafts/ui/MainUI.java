@@ -832,7 +832,7 @@ public class MainUI extends JFrame {
         });
         jMenu2.add(jMenuItem4);
                
-        jMenuItem5.setText("	need remove...	");
+        /*jMenuItem5.setText("	need remove...	");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
      		
@@ -840,15 +840,12 @@ public class MainUI extends JFrame {
                  		//start.setVisible(true);
             }
         });
-        jMenu2.add(jMenuItem5);
+        jMenu2.add(jMenuItem5);*/
                 
         jMenuItem6.setText("	Set Your Workspace...	 ");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcpui = new JcpUI();
-            	jcpui.setVisible(true); 
-            	TwoDThread TThread = new TwoDThread();
-        		TThread.start();
+                
             }
         });
         jMenu4.add(jMenuItem6);

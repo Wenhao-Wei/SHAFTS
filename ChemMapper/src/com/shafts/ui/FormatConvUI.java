@@ -78,7 +78,7 @@ public class FormatConvUI extends JFrame {
      	int x = (width - WIDTH)/2;
      	int y = (height - HEIGHT)/2;
      	frame.setLocation(x-50, y-100);    	
-     	frame.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+     	frame.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
      	frame.setSize(WIDTH, HEIGHT);
      	ComboBox = new JComboBox();		
 		north  = new JPanel();

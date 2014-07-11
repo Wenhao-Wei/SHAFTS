@@ -5,10 +5,14 @@ import java.awt.EventQueue;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+import com.birosoft.liquid.LiquidLookAndFeel;
 import com.shafts.utils.JCPPanel1;
 
 public class JcpUI extends JFrame {
@@ -23,7 +27,13 @@ public class JcpUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JcpUI frame = new JcpUI();
+					
+					JFrame.setDefaultLookAndFeelDecorated(true);
+					 JDialog.setDefaultLookAndFeelDecorated(true);
+						UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+						//LiquidLookAndFeel.setLiquidDecorations(true, "mac");
+						 LiquidLookAndFeel.setLiquidDecorations(true);					 
+					 JcpUI frame = new JcpUI();
 					frame.setVisible(true);
 					System.out.println(JcpUI.DD_FILE_NAME);
 				} catch (Exception e) {
@@ -37,6 +47,8 @@ public class JcpUI extends JFrame {
 	 * Create the frame.
 	 */
 	public JcpUI() {
+		
+		 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100,800, 600);
 		contentPane = new JPanel();
