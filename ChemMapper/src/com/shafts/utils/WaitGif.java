@@ -28,7 +28,7 @@ public class WaitGif extends JFrame
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String path="E:\\Animation\\012_p";
+	private String path;  //="E:\\Animation\\012_p";
 	private final int WIDTH = 200;
 	private final int HEIGHT = 50;
 	private int idx = 1;
@@ -38,6 +38,7 @@ public class WaitGif extends JFrame
     public WaitGif()
     {	
     	//frame = new JFrame();
+    	path = System.getProperty("user.dir") + "\\Pictures\\004.gif";
     	Toolkit kit = Toolkit.getDefaultToolkit();
      	Dimension screensize = kit.getScreenSize();
      	int width = screensize.width;

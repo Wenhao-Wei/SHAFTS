@@ -54,8 +54,10 @@ public class FormatConv extends JDialog{
 			//gifThread = new WaitGif();
 			new Thread(){
 				public void run(){
-			gif = new ShowGif();
-			}
+					gif = new ShowGif();
+					gif.setUndecorated(true);
+					gif.setVisible(true);
+				}
 			}.start();
 			//System.out.println("*****************"+outFormat);
 			new Thread(){

@@ -48,7 +48,7 @@ public class WorkpathSetUI extends JDialog{
      	int height = screensize.height;
      	int x = (width - WIDTH)/2;
      	int y = (height - HEIGHT)/2;
-     	setLocation(x-50, y-100);
+     	setLocation(x, y);
      	setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
      	setSize(WIDTH, HEIGHT);
      	setResizable(false);
@@ -111,8 +111,7 @@ public class WorkpathSetUI extends JDialog{
 		}
 		public centerpanel(){
 	     	workspace = new JLabel("Workspace:   ");
-	     	field = new JTextField();
-	     	
+	     	field = new JTextField(25);
 	     	defaultpath = System.getProperty("user.dir");
 	     	field.setText(defaultpath + "\\workspace");
 	     	browse = new JButton("Browse");
@@ -134,7 +133,7 @@ public class WorkpathSetUI extends JDialog{
 	    			if (result==JFileChooser.APPROVE_OPTION){
 	    				File file=fc.getSelectedFile();
 	    				workpath = file.getAbsolutePath();
-	    				workpath = workpath + "workspace";
+	    				workpath = workpath + "\\workspace";
 		    			field.setText(workpath);
 	    			}
 	    			

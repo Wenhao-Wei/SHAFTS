@@ -14,7 +14,7 @@ public class PropertyConfig extends Properties{
 	//private Properties prop;
 	public void createProperties(String value1, String value2){
 		//prop = new Properties();
-		put("usedefault",value1);
+		put("showagain",value1);
 		put("workpath", value2);	
 	    try {
 	    	//±£¥Ê
@@ -36,24 +36,24 @@ public class PropertyConfig extends Properties{
 			    //∂¡»°
 			    FileInputStream in = new FileInputStream("userinfo.properties");
 			    load(in);
-			    usedefault = getProperty("usedefault");
+			    usedefault = getProperty("showagain");
 			    workpath = getProperty("workpath");
 			    array.add(usedefault);
 			    array.add(workpath);
 			    in.close();	
 			    return array;
 			   } catch (FileNotFoundException e) {
-				   e.printStackTrace();
+				   //e.printStackTrace();
 				   return null;
 			   
 			   } catch (IOException e) {
-			    e.printStackTrace();
+			    //e.printStackTrace();
 			    return null;
 			   }
 		 
 	}
-	public void updateProperties(String usedefault,String workpath){
-		this.createProperties(usedefault, workpath);
+	public void updateProperties(String showagain,String workpath){
+		this.createProperties(showagain, workpath);
 		//setProperty("usedefault",usedefault);
 		//setProperty("localworkpath",localworkpath);
 		//setProperty("networkpath", networkpath);
@@ -62,19 +62,22 @@ public class PropertyConfig extends Properties{
   public static void main(String args[]){
 	  
 	  PropertyConfig properties = new PropertyConfig();
-	  properties.createProperties("NO","weiwenhao");
-	  try {		    		    
+	 // properties.createProperties("NO","weiwenhao");
+	  ArrayList<String> a = properties.readProperties();
+	  if(a == null)
+	  System.out.println("error");
+	/*  try {		    		    
 		    //∂¡»°
 		    FileInputStream in = new FileInputStream("userinfo.properties");
 		    properties.load(in);
-		    System.out.println(properties.getProperty("usedefault"));
+		    System.out.println(properties.getProperty("showagain"));
 		    System.out.println(properties.getProperty("workpath"));
-		    properties.updateProperties("NO","fs");
+		    properties.updateProperties("NO","C:\\Users\\visen\\Desktop");
 		    in.close();
 		    FileInputStream in2 = new FileInputStream("userinfo.properties");
 		    properties.load(in2);
 		    System.out.println("******************AfterUpdate******************");
-		    System.out.println(properties.getProperty("usedefault"));
+		    System.out.println(properties.getProperty("showagain"));
 		    System.out.println(properties.getProperty("workpath"));
 		    in2.close();	
 		    
@@ -82,6 +85,6 @@ public class PropertyConfig extends Properties{
 		    e.printStackTrace();
 		   } catch (IOException e) {
 		    e.printStackTrace();
-		   }
+		   }*/
   }
  }
