@@ -5,7 +5,10 @@ import java.awt.*; //******
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -94,7 +97,7 @@ public class MainUI extends JFrame {
 			public void run() {
 				try { // 设置外观
 					JFrame.setDefaultLookAndFeelDecorated(true);
-					JDialog.setDefaultLookAndFeelDecorated(true);
+					//JDialog.setDefaultLookAndFeelDecorated(true);
 
 					// UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
 					// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -335,14 +338,18 @@ public class MainUI extends JFrame {
 		File f2 = new File(networkPath);
 		File[] listdir1 = f1.listFiles();
 		File[] listdir2 = f2.listFiles();
-		for (int i = 0; i < listdir1.length; i++) {
-			String nodename = listdir1[i].getName();
-			addlocalnode(nodename);
-		}
-		for (int i = 0; i < listdir2.length; i++) {
-			String nodename = listdir2[i].getName();
-			addnetnode(nodename);
-		}
+		if(f1!=null){
+			for (int i = 0; i < listdir1.length; i++) {
+				String nodename = listdir1[i].getName();
+				addlocalnode(nodename);
+				}
+			}
+		if(f2!=null){
+			for (int i = 0; i < listdir2.length; i++) {
+				String nodename = listdir2[i].getName();
+				addnetnode(nodename);
+				}
+			}
 		LocalTree.setEditable(true);
 		NetTree.setEditable(true);
 		LocalTree.updateUI();
@@ -472,45 +479,7 @@ public class MainUI extends JFrame {
 					}
 				}
 			}
-		}
-		/**
-		 * 二维分子编辑对应主界面显示同步
-		 * 
-		 * @author baoabo
-		 *
-		 */
-		class RenderThread extends Thread {
-			private long lastmodified = 0;
-			private final int SLEEP_TIME = 2000;
-
-			@SuppressWarnings("static-access")
-			public void run() {
-				file2 = new File(createMolecule.RENDER_FILE_NAME);
-				jTextField1.setText(createMolecule.RENDER_FILE_NAME);
-				while (true) {
-					if (file2.exists() && file2.lastModified() > lastmodified) {
-						jmolPanel2.viewer
-								.openFile(CreateMolecule.RENDER_FILE_NAME);
-						String bandian = "dots on";
-						jmolPanel2.viewer.evalString(bandian);
-						lastmodified = file2.lastModified();
-					}
-					try {
-						Thread.sleep(SLEEP_TIME);
-					} catch (InterruptedException e) {
-						// ignore the exception caused by the application's
-						// close
-					}
-				}
-			}
-
-			@Override
-			public void interrupt() {
-				super.interrupt();
-				if (file2.exists())
-					file2.delete();
-			}
-		}
+		}		
 		/**
 		 * 2D编辑对应的三维显示
 		 * 
@@ -524,11 +493,13 @@ public class MainUI extends JFrame {
 			@SuppressWarnings("static-access")
 			public void run() {
 				file3 = new File(createMolecule.RENDER_FILE_NAME);
-				jTextField1.setText(createMolecule.RENDER_FILE_NAME);
+				String filePath = file3.getAbsolutePath();
+				System.out.println(filePath);
+				jTextField1.setText(filePath);
 				while (true) {
 					if (file3.exists() && file3.lastModified() > lastmodified1) {
 						jmolPanel2.viewer
-								.openFile(CreateMolecule.RENDER_FILE_NAME);
+								.openFile(filePath);//CreateMolecule.RENDER_FILE_NAME
 						String bandian = "dots on";
 						jmolPanel2.viewer.evalString(bandian); // 修改 2014.1.2
 						lastmodified1 = file3.lastModified();
@@ -874,11 +845,16 @@ public class MainUI extends JFrame {
 		jMenuItem1.setText("	Open File...	");
 		jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				createMolecule = new CreateMolecule();
-				createMolecule.setVisible(true);
-				createMolecule.startPaintingThread();
-				RenderThread rThread = new RenderThread();
-				rThread.start();
+				JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
+				file.showOpenDialog(null);
+				file.setDialogTitle("Please choose the input file...");
+				inFilePath = file.getSelectedFile().getAbsolutePath();
+				jmolPanel2.viewer.openFile(inFilePath);
+				String bandian = "dots on";
+				jmolPanel2.viewer.evalString(bandian);
+				File file11 = new File(inFilePath);
+				jtextField3.setText(file11.getName());
+				//jTextField1.setText(inFilePath);
 			}
 		});
 		jMenu1.add(jMenuItem1);
@@ -1011,9 +987,9 @@ public class MainUI extends JFrame {
 		});
 		jMenu5.add(jMenuItem13);
 		/**
-		 * *******************set the molecule surface
-		 * ***************************
-		 * **/
+		 * *******************set the molecule surface************************************
+		 * 2014-07-14
+		 **/
 		jMenuItem26.setText("	Dot Surface	");
 		jMenuItem26.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1458,324 +1434,234 @@ public class MainUI extends JFrame {
 		northJPanel.add(jMenuBar1);
 		northJPanel.add(iconPanel);
 
-		/**
-		 * westpanel
+		/*******************************************WestPanel*************************************
+		 * To carry on the functions of molecular screening
+		 * 2014-07-14
+		 * *****************************************Wenhao Wei************************************
 		 */
+		usermethod = 1;
 		westJPanel.setLayout(new GridLayout());
-		jTabbedPane1 = new JTabbedPane(JTabbedPane.TOP);
-		westJPanel.add(jTabbedPane1);
-		westJPanel.setVisible(true);
-		jPanel1 = new JPanel();
-		jPanel1.setLayout(new GridLayout(9, 1, 20, 20));
-		jPanel2 = new JPanel();
-		jPanel2.setLayout(new GridLayout());
-
-		// jmolPanel2 = new JmolPanel1();
-
-		jLabel1 = new javax.swing.JLabel();
-		jLabel2 = new javax.swing.JLabel();
-		jLabel3 = new javax.swing.JLabel();
-		jLabel4 = new javax.swing.JLabel();
-		jLabel11 = new javax.swing.JLabel();
-		jLabel12 = new javax.swing.JLabel();
-		jSeparator1 = new javax.swing.JSeparator();
-		jSeparator2 = new javax.swing.JSeparator();
-		jSeparator3 = new javax.swing.JSeparator();
-		jSeparator4 = new javax.swing.JSeparator();
-		jComboBox1 = new javax.swing.JComboBox();
-		jComboBox2 = new javax.swing.JComboBox();
-		jComboBox4 = new javax.swing.JComboBox();
-		jButton3 = new javax.swing.JButton();
-		Box hbox1 = Box.createHorizontalBox();
-		hbox1.add(jButton3);
-		jTextField2 = new javax.swing.JTextField();
-		jTextField2.setOpaque(false);
-		button2 = new JButton();
-		/**
-		 * 本地筛选模式
-		 */
-		button2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String st = jTextField1.getText();
-				if (st.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "请选择对比源文件！");
-				} else {
-					outputNum = jtextField1.getText();
-					threshold = jtextField2.getText();
-					NewPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\Job";
-					Shafts sf = new Shafts();
-					sf.shaftinit(NewPath, inFilePath, DataBase, outputNum,
-							threshold);
-					String workid = sf.getworkid();
-					addlocalnode(workid);
-					FilePath1 = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\localwork\\"
-							+ workid + "\\";
-					String path = NewPath + "\\Result.list";
-					data = sf.getdata();
-					Vector columnNames = IV.getcolumn();
-					southJPanel.removeAll();
-					southJPanel.updateUI();
-					jTable1 = new JTable();
-					CheckTableModle tableModel = new CheckTableModle(data,
-							columnNames);
-					jTable1.setModel(tableModel);
-					jTable1.getTableHeader().setDefaultRenderer(
-							new CheckHeaderCellRenderer(jTable1));
-					jTable1.addMouseListener(new ShowMol());
-					JScrollPane jScrollPane1 = new JScrollPane(jTable1);
-					southJPanel.add(jScrollPane1);
-					southJPanel.updateUI();
-					flag = 0;
-					ifshow = new Hashtable<String, Integer>();
-				}
-			}
-		});
-
-		// 选项卡一
-
-		jTabbedPane1.addTab("	格式转换		", jPanel1);
-		jLabel1.setText("3DMV 功能选择");
-		jLabel2.setText("格式转换输入格式");
-		jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "请输入要进行转换的格式...", "mol", "CDK", "cml", "rxn",
-						"smiles", "mol2" }));
+		jTabbedPane1 = new JTabbedPane();
+		westchildPanel = new JPanel();
+		jlabel1 = new JLabel("Smilarity Method:");
+		jLabel1 = new JLabel("(Note:File size must less than 10MB!)");
+		jButton11 = new JButton("Export");              //****************export the result
+		north = new JPanel(new GridLayout());
+		center = new JPanel(new GridLayout());
+		south = new JPanel();				
+		jSeparator1 = new JSeparator();
+		jPanel1 = new JPanel(new GridLayout(5, 1,10,10));
+		panel1 = new JPanel(new GridLayout(1, 2,0,10));
+		panel2 = new JPanel(new GridLayout(1, 2,0,10));
+		panel3 = new JPanel(new GridLayout(1, 2,0,10));
+		jPanel2 = new JPanel(new GridLayout(1, 1,0,10));
+		jPanel1.add(panel1);
+		jPanel1.add(panel2);
+		jPanel1.add(panel3);
+		jPanel1.add(jPanel2);
+		jPanel1.add(jSeparator1);
+		jPanel3 = new JPanel(new GridLayout(5, 1,10,10));   //upload database panel
+		jPanel4 = new JPanel(new GridLayout(1, 2,70,10));
+		jPanel5 = new JPanel(new GridLayout(5, 1,10,10));    //chemmapper database panel
+		jPanel6 = new JPanel(new GridLayout(1, 2,30,10));
+		jPanel7 = new JPanel(new GridLayout(1, 2,70,10));
+		checkbox = new JCheckBox("Gernerated Conformers");
+		jLabel4 = new JLabel("Input Molecule:");
+		jtextField3 = new JTextField();
+		jtextField3.setEditable(false);
+		jLabel2 = new JLabel("Similarity Threshold:");
+		jLabel3 = new JLabel("Max Hits:");
+		jComboBox1 = new JComboBox();
+		jComboBox2 = new JComboBox();
+		jComboBox3 = new JComboBox();
+		jComboBox4 = new JComboBox();
+		jComboBox5 = new JComboBox();
+		
+		jComboBox1.setModel(new DefaultComboBoxModel(new String[] { "0.8", "1.0", "1.2", "1.5", "1.8"}));
+		jComboBox1.setSelectedItem("1.2");
+		threshold = "1.2";
 		jComboBox1.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					String s = (String) jComboBox1.getSelectedItem();
-					inFormat = s;
-					System.out.println(inFormat);
+					threshold = (String) jComboBox1.getSelectedItem();
 				}
 			}
 		});
-		jLabel12.setText("格式转换输出格式");
-		jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-				"请输入要进行导出的格式...", "mol2", "pdb", "cdk", "cml" }));
-		jComboBox2.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					String s = (String) jComboBox2.getSelectedItem();
-					outFormat = s;
-					System.out.println(outFormat);
-				}
-			}
-		});
-		jButton3.setText("开始转换"); // ***********下
-		jPanel1.add(jLabel1);
-		jPanel1.add(jSeparator1);
-		jPanel1.add(jLabel2);
-		jPanel1.add(jComboBox1);
-		jPanel1.add(jLabel12);
-		jPanel1.add(jComboBox2);
-		jPanel1.add(hbox1);
-		/*
-		 * jButton3.addActionListener(new ActionListener() { //开始转换按钮 public
-		 * void actionPerformed(ActionEvent e) { if(inFilePath==null){
-		 * JOptionPane.showMessageDialog( null,"错误！请选择文件！"); }
-		 * 
-		 * else{ JFileChooser fc=new
-		 * JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
-		 * fc.setMultiSelectionEnabled(false); int
-		 * result=fc.showSaveDialog(null); if
-		 * (result==JFileChooser.APPROVE_OPTION){ File
-		 * file=fc.getSelectedFile(); fileName=file.getName();
-		 * 
-		 * outFilePath=file.getAbsolutePath(); System.out.println(fileName); }
-		 * 
-		 * formatconv(); jTextField2.setText(outFilePath);
-		 * 
-		 * 
-		 * }
-		 * 
-		 * } });
-		 */
-		/**
-		 * 选项卡二： 数据库选择
-		 */
-
-		// 本地数据库
-
-		jtabbedPane1 = new JTabbedPane(JTabbedPane.BOTTOM);
-		panel1 = new JPanel(); // 本模块专用组件 每种10个（含预留）
-		panel1.setLayout(new GridLayout(8, 2, 20, 20));
-		jlabel1 = new JLabel();
-		jlabel2 = new JLabel();
-		jlabel3 = new JLabel();
-		jlabel4 = new JLabel();
-		button1 = new JButton();
-		jtextField1 = new JTextField(); // 筛选个数
-		jtextField2 = new JTextField(); // 分子阈值
-		jtextField3 = new JTextField();
-		JLabel label1 = new JLabel();
-		JLabel label2 = new JLabel();
-		JLabel label3 = new JLabel();
-		JLabel label4 = new JLabel();
-		label1.setText("   ");
-		label2.setText("   ");
-		label3.setText("   ");
-		label4.setText("   ");
-		jlabel1.setText(" 筛选结果个数(<=1000):");
-		jlabel1.setToolTipText("筛选结果最大为1000");
-		jlabel2.setText(" 分子阈值(0~2):");
-		jlabel2.setToolTipText("分子阈值在0到2之间");
-		panel1.add(jlabel1);
-		panel1.add(jtextField1);
+		jtextField1 = new JTextField(); // screen number
 		jtextField1.setText("1000");
-		panel1.add(jlabel2);
-		panel1.add(jtextField2);
-		jtextField2.setText("0");
-		jlabel3.setText(" 数据库：");
-		jlabel4.setText("      ");
-		button1.setText(" 浏览");
-		button2.setText(" 开始对比");
-		panel1.add(jlabel3);
-		panel1.add(jlabel4);
-		panel1.add(jtextField3); // 显示选择的本地数据库文件
-		panel1.add(button1);
-		panel1.add(label1);
-		panel1.add(label2);
-		panel1.add(label3);
-		panel1.add(jSeparator2);
-		panel1.add(label4);
-		panel1.add(button2);
+		panel1.add(jLabel4);
+		panel1.add(jtextField3);
+		panel2.add(jLabel2);
+		panel2.add(jComboBox1);
+		panel3.add(jLabel3);
+		panel3.add(jtextField1);
+		//jrButton1 = new JRadioButton("Upload a datatbase:");
+		//jrButton1.setBorder(new EmptyBorder(0,0,0,0));
+		//jrButton2 = new JRadioButton("Use ChemMapper datatbase:");
+		//jrButton2.setBorder(new EmptyBorder(0,0,0,0));
+		jrButton1 = new JRadioButton("Bioactivity Database");
+		jrButton2 = new JRadioButton("Compound Datatbase:");
+		jrButton1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				usermethod = 2;
+				jComboBox2.setEnabled(true);
+				jComboBox3.setEnabled(false);
+			}
+		});	
+		jrButton2.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				usermethod = 3;
+				jComboBox3.setEnabled(true);
+				jComboBox2.setEnabled(false);
+			}
+		});	
+		ButtonGroup bg1 = new ButtonGroup();
+		bg1.add(jrButton1);
+		bg1.add(jrButton2);
+		jtextField2 = new JTextField(); // user upload database
+		button1 = new JButton("Browse");
 		button1.addActionListener(new ActionListener() { // 打开数据库文件
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser file = new JFileChooser(
-						"D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
+				JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
 				file.showOpenDialog(null);
 				Filepath = file.getSelectedFile().getAbsolutePath();
 				File file1 = new File(Filepath);
-				jtextField3.setText(file1.getName()); // 显示选择的数据库名
+				jtextField2.setText(file1.getName()); // 显示选择的数据库名
 				DataBase = Filepath;
-				System.out.println(inFormat);
+				//System.out.println(inFormat);
 
 			}
 		});
-
-		// 网络数据库
-
-		panel2 = new JPanel();
-		panel3 = new JPanel();
-		panel4 = new JPanel();
-		panel5 = new JPanel();
-		button3 = new JButton();
-		button4 = new JButton();
-		button5 = new JButton();
-		jtextField4 = new JTextField();
-		jtextField5 = new JTextField();
-		jComboBox111 = new JComboBox();
-		jComboBox222 = new JComboBox();
-		jComboBox333 = new JComboBox();
-		panel2.setLayout(new GridLayout(3, 1, 10, 10));
-		panel3.setLayout(new GridLayout(3, 2, 10, 10));
-		panel4.setLayout(new GridLayout(3, 1, 10, 10));
-		panel5.setLayout(new GridLayout(3, 2, 10, 10));
-		jlabel5 = new JLabel();
-		jlabel6 = new JLabel();
-		jlabel7 = new JLabel();
-		jlabel8 = new JLabel();
-		jlabel9 = new JLabel();
-		jlabel10 = new JLabel();
-		jlabel11 = new JLabel();
-		jlabel5.setText("筛选结果个数(<=1000)：");
-		jlabel5.setToolTipText("筛选结果最大为1000");
-		jlabel6.setText("分子阈值(0~2)：");
-		jlabel6.setToolTipText("分子阈值在0到2之间");
-		jlabel7.setText("选择对比方法：");
-		jComboBox111.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "请选择...", "SHAFTS", "USR" }));
-		jComboBox111.addItemListener(new ItemListener() {
+		jPanel2.add(jComboBox5);
+		jPanel4.add(jtextField2);
+		jPanel4.add(button1);
+		jPanel3.add(jPanel4);
+		jPanel3.add(checkbox);
+		jPanel3.add(jLabel1);		
+		
+		jComboBox2.setModel(new DefaultComboBoxModel(new String[] { "Choose...", "DrugBank", "ChEMBL", "BindingDB","KEGG", "PDB" }));
+		jComboBox2.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (((String) jComboBox111.getSelectedItem())
-							.equals("SHAFTS"))
-						model2 = "FeatureAlign";
-					else if (((String) jComboBox111.getSelectedItem())
-							.equals("USR"))
-						model2 = "ShapeFilter";
-				}
-			}
-		}); // 待添加2013.12.05
-		panel3.add(jlabel5);
-		panel3.add(jtextField4);
-		panel3.add(jlabel6);
-		panel3.add(jtextField5);
-		panel3.add(jlabel7);
-		panel3.add(jComboBox111);
-		jlabel8.setText("请在任一模式中选择数据库（不可全选）：");
-		panel4.add(jSeparator3);
-		panel4.add(jlabel8);
-		panel4.add(jSeparator4);
-		jlabel9.setText("Target Navigator:");
-		jlabel10.setText("Hit Explorer:");
-		jComboBox222.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "请选择...", "DrugBank", "ChEMBL", "BindingDB",
-						"KEGG", "PDB" }));
-		jComboBox222.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					model1 = (String) jComboBox222.getSelectedItem();
+					model1 = (String) jComboBox2.getSelectedItem();
 					model = 0;
 				}
 			}
 		}); // 待添加2013.12.05
-		jComboBox333
-				.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-						"请选择...", "MayBridge", "Specs", "ZINC", "NCI" }));
-		jComboBox333.addItemListener(new ItemListener() {
+		jComboBox2.setEnabled(false);
+		jComboBox3.setModel(new DefaultComboBoxModel(new String[] { "Choose...", "MayBridge", "Specs", "ZINC", "NCI" }));
+		jComboBox3.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					model1 = (String) jComboBox333.getSelectedItem();
+					model1 = (String) jComboBox3.getSelectedItem();
 					model = 1;
 				}
 			}
-		}); // 待添加2013.12.05
-		jlabel11.setText("    ");
-		button3.setText("开始对比");
-		panel5.add(jlabel9);
-		panel5.add(jComboBox222);
-		panel5.add(jlabel10);
-		panel5.add(jComboBox333);
-		panel5.add(jlabel11);
-		panel5.add(button3);
-
-		/**
-		 * 网络筛选，提交作业并返回ID，将ID加入到作业树中
-		 */
-		button3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (jTextField2 != null) {
-					HttpInvokerClient HIC = new HttpInvokerClient();
-					String ID = HIC.getid(inFilePath, model,
-							jtextField4.getText(), model2, model1,
-							jtextField5.getText());
-					addnetnode(ID);
-				} else {
-					JOptionPane.showMessageDialog(null, "请选择对比源文件！");
-				}
-				// node1 = new DefaultMutableTreeNode(ID);
-				// root.add(node1);
-				// tree.scrollPathToVisible(new TreePath(node1.getPath()));
-				// tree.updateUI();
+		});
+		jComboBox3.setEnabled(false);
+		jComboBox4.setModel(new DefaultComboBoxModel(new String[] { "Choose...", "SHAFTS","USR" }));
+		jComboBox4.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {       
+		            	if(e.getStateChange() == ItemEvent.SELECTED){  
+		            		if(((String)jComboBox4.getSelectedItem()).equals("SHAFTS"))
+		            	  model2="FeatureAlign";
+		            		else if(((String)jComboBox4.getSelectedItem()).equals("USR"))
+		            			model2="ShapeFilter"; 	
+		       }
 			}
-		}); // 添加事件修改 2014.2.21
-
-		panel2.add(panel3);
-		panel2.add(panel4);
-		panel2.add(panel5);
-		// panel2.setEnabled(false);
-		// panel2.setVisible(false);
-		jtabbedPane1.add(" 本地数据库  ", panel1);
-		jtabbedPane1.add(" 网络数据库  ", panel2);
-		if (IsUse != 1) {
-			jtabbedPane1.setEnabledAt(1, false);
-		}
-		jTabbedPane1.addTab("  数据库选择器    ", jtabbedPane1);
-
-		/**
-		 * eastJPanel
+		});
+		jComboBox5.setModel(new DefaultComboBoxModel(new String[] {"Upload a datatbase","Use ChemMapper datatbase" }));
+		jComboBox5.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {       
+		            	if(e.getStateChange() == ItemEvent.SELECTED){  
+		            		if(((String)jComboBox5.getSelectedItem()).equals("Upload a datatbase")){
+		            			usermethod = 1;
+		            			center.removeAll();
+		            			center.add(jPanel3);
+		            			center.updateUI();
+		            		}
+		            		else if(((String)jComboBox5.getSelectedItem()).equals("Use ChemMapper datatbase")){
+		            			
+		            			center.removeAll();
+		            			center.add(jPanel5);
+		            			center.updateUI();
+		            		} 	
+		       }
+			}
+		});
+		jPanel6.add(jlabel1);
+		jPanel6.add(jComboBox4);
+		jPanel5.add(jPanel6);
+		jPanel5.add(jrButton1);
+		jPanel5.add(jComboBox2);
+		jPanel5.add(jrButton2);
+		jPanel5.add(jComboBox3);
+		button2 = new JButton("Start");        //start screen
+		jPanel7.add(jButton11);
+		jPanel7.add(button2);
+		north.add(jPanel1);
+		//north.add(jPanel2);
+		center.add(jPanel3);
+		south.add(jPanel7,BorderLayout.CENTER);
+		
+		westchildPanel.add(north,BorderLayout.NORTH);
+		westchildPanel.add(center,BorderLayout.CENTER);
+		westchildPanel.add(south,BorderLayout.SOUTH);
+		jTabbedPane1.add( "Similarity",westchildPanel);
+		westJPanel.add(jTabbedPane1);
+		
+		button2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String st = jtextField3.getText();
+				outputNum = jtextField1.getText();
+				System.out.println(threshold);
+				if (st.isEmpty())
+					JOptionPane.showMessageDialog(null, "Please select the input molecule！");
+				else {
+						switch(usermethod){
+							case 1:	if(DataBase == null)
+										JOptionPane.showMessageDialog(null, "Please select the input molecule！");
+									else{
+										NewPath = localworkPath + "Job";
+										Shafts sf = new Shafts();
+										sf.shaftinit(NewPath, inFilePath, DataBase, outputNum,threshold);
+										String workid = sf.getworkid();
+										addlocalnode(workid);
+										FilePath1 = localworkPath + workid + "\\";
+										String path = NewPath + "\\Result.list";
+										data = sf.getdata();
+										Vector columnNames = IV.getcolumn();
+										southJPanel.removeAll();
+										southJPanel.updateUI();
+										jTable1 = new JTable();
+										CheckTableModle tableModel = new CheckTableModle(data,columnNames);
+										jTable1.setModel(tableModel);
+										jTable1.getTableHeader().setDefaultRenderer(new CheckHeaderCellRenderer(jTable1));
+										jTable1.addMouseListener(new ShowMol());
+										JScrollPane jScrollPane1 = new JScrollPane(jTable1);
+										southJPanel.add(jScrollPane1);
+										southJPanel.updateUI();
+										flag = 0;
+										ifshow = new Hashtable<String, Integer>();
+									}
+									break;
+							case 2: break;
+							case 3: HttpInvokerClient HIC = new HttpInvokerClient();
+									System.out.println(model+"***"+model2+"***"+ model1);
+									String ID = HIC.getid(inFilePath, model,outputNum, model2, model1,threshold);
+									addnetnode(ID);
+									break;
+							default: break;
+						
+						
+						}
+					
+				}
+			}
+		});		
+		/**********************************************EastJPanel*********************************
+		 * The working record place
+		 * 2014-07-14
 		 */
 
 		jLabel5 = new javax.swing.JLabel();
@@ -1787,7 +1673,6 @@ public class MainUI extends JFrame {
 		jtextField6 = new JTextField();
 		jButton2 = new javax.swing.JButton();
 		jButton10 = new javax.swing.JButton();
-		jButton11 = new javax.swing.JButton();
 		jButton12 = new javax.swing.JButton();
 		if (IsUse != 1) {
 			jButton12.setEnabled(false);
@@ -1813,65 +1698,7 @@ public class MainUI extends JFrame {
 
 		jButton11.addActionListener(new ActionListener() { // 导出对比结果
 					public void actionPerformed(ActionEvent e) {
-
 						new ExportXlsUI(jTable1);
-						/*
-						 * JFileChooser fc=new
-						 * JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper"
-						 * ); //fc.setFileFilter(filter);
-						 * fc.setMultiSelectionEnabled(false); int
-						 * result=fc.showSaveDialog(null); if
-						 * (result==JFileChooser.APPROVE_OPTION){ File
-						 * file=fc.getSelectedFile(); //fileName=file.getName();
-						 * outFilePath=file.getAbsolutePath();
-						 * JOptionPane.showMessageDialog( null,"导出成功！");
-						 * //System.out.println(fileName); } String
-						 * excelFileName = outFilePath+".xls";
-						 * 
-						 * if(jTable1.getRowCount() == 1)
-						 * JOptionPane.showMessageDialog( null,"没有可导出的对比结果！");
-						 * else{ try{ HSSFWorkbook workbook=new HSSFWorkbook();
-						 * HSSFSheet sheet=workbook.createSheet();
-						 * workbook.setSheetName(0, "分子相似性对比结果"); HSSFCellStyle
-						 * cellStyle=workbook.createCellStyle();
-						 * cellStyle.setDataFormat
-						 * (HSSFDataFormat.getBuiltinFormat("@")); HSSFRow
-						 * row=sheet.createRow(0); HSSFCell cell1 =
-						 * row.createCell(0); //第一列 HSSFCell cell2 =
-						 * row.createCell(1); HSSFCell cell3 =
-						 * row.createCell(2); HSSFCell cell4 =
-						 * row.createCell(3); HSSFCell cell5 =
-						 * row.createCell(4); HSSFCell cell6 =
-						 * row.createCell(5); //定义单元格为字符串类型
-						 * cell1.setCellType(HSSFCell.CELL_TYPE_STRING);
-						 * cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
-						 * cell3.setCellType(HSSFCell.CELL_TYPE_STRING);
-						 * cell4.setCellType(HSSFCell.CELL_TYPE_STRING);
-						 * cell5.setCellType(HSSFCell.CELL_TYPE_STRING);
-						 * cell6.setCellType(HSSFCell.CELL_TYPE_STRING);
-						 * cell1.setCellValue("Rank");
-						 * cell2.setCellValue("Name");
-						 * cell3.setCellValue("HybridScore");
-						 * cell4.setCellValue("ShapeScore");
-						 * cell5.setCellValue("FeatureScore");
-						 * cell6.setCellValue("Query");
-						 * 
-						 * int j = 1; // j为导出的excel行数 int k; //k为列 for(int
-						 * i=1;i<jTable1.getRowCount();i++){ //i为表的行数 第一行为表头
-						 * if((boolean) jTable1.getValueAt(i,0)) { row =
-						 * sheet.createRow(j); for(k=1;k<7;k++) { HSSFCell
-						 * cell=row.createCell(k-1); String s =
-						 * (String)jTable1.getValueAt(i,k); //设置单元格格式
-						 * cell.setCellStyle(cellStyle);
-						 * cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-						 * cell.setCellValue(s); } j++; } } //建立一个文件输出流
-						 * FileOutputStream fOut=new
-						 * FileOutputStream(excelFileName); //把相应的Excel工作薄存盘
-						 * workbook.write(fOut); //操作结束，关闭文件 fOut.flush();
-						 * fOut.close(); //JOptionPane.showMessageDialog(
-						 * null,"导出成功！"); } catch (Throwable t) {
-						 * t.printStackTrace(); } }
-						 */
 					}
 				});
 
@@ -1942,13 +1769,9 @@ public class MainUI extends JFrame {
 		scrollPane1.setViewportView(NetTree);
 		jPanel3.add(scrollPane);
 		jPanel3.add(scrollPane1);
-		// eastJPanel.add(jPanel3);
-		// jp = new JobPanel();
-		// jp.initwork();
-		// eastJPanel.add(jp);
 		eastJPanel.add(jPanel3);
 		JPanel jPanel4 = new JPanel(new GridLayout(6, 1, 10, 10));
-		eastJPanel.add(jPanel4);
+		//eastJPanel.add(jPanel4);
 		JPanel jpanel44 = new JPanel(new GridLayout(1, 2, 50, 30));
 		JPanel jPanel55 = new JPanel(new GridLayout(1, 2, 100, 30));
 		JPanel jPanel56 = new JPanel(new GridLayout(1, 2, 100, 30));
@@ -1966,10 +1789,10 @@ public class MainUI extends JFrame {
 		jLabel7.setText(" ");
 		jLabel8.setText(" ");
 		jPanel56.add(jLabel8);
-		jPanel56.add(jButton11);
+		//jPanel56.add(jButton11);
 		jButton2.setText("打开文件");
 		jButton10.setText("更新");
-		jButton11.setText("导出结果");
+		//jButton11.setText("导出结果");
 		jPanel4.add(jLabel6);
 		jPanel4.add(jTextField1);
 		jPanel4.add(jPanel55);
@@ -1978,12 +1801,12 @@ public class MainUI extends JFrame {
 		// southPanel
 
 		southJPanel.setLayout(new GridLayout());
-		String path = "";
+		String path = null;
 		IV = new InitVector();
 		// data = new Vector();
 		data = IV.getdata(path);
 		Vector columnNames = IV.getcolumn();
-		CheckTableModle tableModel = new CheckTableModle(null, columnNames);
+		CheckTableModle tableModel = new CheckTableModle(data, columnNames);
 		jTable1 = new JTable();
 		jTable1.setModel(tableModel);
 		jTable1.getTableHeader().setDefaultRenderer(
@@ -2023,6 +1846,7 @@ public class MainUI extends JFrame {
 				else
 					path = pc.getProperty("workpath");
 				localworkPath = path + "\\localwork\\";
+				System.out.println(localworkPath);
 				networkPath = path + "\\network\\";
 				downloadPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\download\\";
 				picturePath = System.getProperty("user.dir") + "\\Pictures";
@@ -2030,11 +1854,12 @@ public class MainUI extends JFrame {
 				IsUse = 1;// CUS.getuserstatus();
 				getContentPane().setLayout(new BorderLayout());
 				setLocation(5, 5);
-				setSize(1200, 700);
+				setSize(1200, 700);  //1200,700
+				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				setTitle("SHAFTS");
 				initComponents();
 				initwork();
-				data.removeAllElements();
+				//data.removeAllElements();
 				LA.close();
 			//}
 		//}.start();
@@ -2060,6 +1885,7 @@ public class MainUI extends JFrame {
 
 	private String threshold; // 分子相似性阈值
 	private String outputNum; // 最大输出结果分子数
+	
 	private String NewPath;
 	private String localworkPath;
 	private String networkPath;
@@ -2072,46 +1898,45 @@ public class MainUI extends JFrame {
 	private int flag = 0; // 分子标记
 	private int IsRename = 0; // 是否重命名标记
 	private int IsUse = 0;
+	private int usermethod = 0;
 	private Hashtable<String, Integer> ifshow;
 	private TreeNode treenode;
 	private JPanel eastJPanel;
+	private JPanel westchildPanel;
 	private JPanel westJPanel;
 	private JPanel northJPanel;
 	private JPanel southJPanel;
 	private JPanel centerJPanel;
 	private JPanel iconPanel;
+	private JPanel north;
+	private JPanel center;
+	private JPanel south;
 	private JPanel panel1;
 	private JPanel panel2;
 	private JPanel panel3;
 	private JPanel panel4;
 	private JPanel panel5;
-	private JPanel panel6;
-	private JPanel panel7;
-	private JPanel panel8;
-	private JPanel panel9;
-	private JPanel panel10;
 	private JPanel jPanel1;
 	private JPanel jPanel2;
-	private JPanel tp1;
-	private JPanel tp2;
-	private JComboBox jComboBox111;
-	private JComboBox jComboBox222;
-	private JComboBox jComboBox333;
+	private JPanel jPanel3;
+	private JPanel jPanel4;
+	private JPanel jPanel5;
+	private JPanel jPanel6;
+	private JPanel jPanel7;
+	private JPanel jPanel8;
 	private JComboBox jComboBox1;
 	private JComboBox jComboBox2;
+	private JComboBox jComboBox3;
 	private JComboBox jComboBox4;
+	private JComboBox jComboBox5;
+	private JCheckBox checkbox;
 	private JTabbedPane jtabbedPane1;
-	private JTabbedPane jtabbedPane2;
 	private JTextField jtextField1;
 	private JTextField jtextField2;
 	private JTextField jtextField3;
 	private JTextField jtextField4;
 	private JTextField jtextField5;
 	private JTextField jtextField6;
-	private JTextField jtextField7;
-	private JTextField jtextField8;
-	private JTextField jtextField9;
-	private JTextField jtextField10;
 	private JLabel jlabel1;
 	private JLabel jlabel2;
 	private JLabel jlabel3;
@@ -2127,12 +1952,45 @@ public class MainUI extends JFrame {
 	private JLabel jLabel2;
 	private JLabel jLabel3;
 	private JLabel jLabel4;
-	private JButton jButton1;
+	private JLabel jLabel5;
+	private JLabel jLabel6;
+	private JLabel jLabel7;
+	private JLabel jLabel8;
+	private JLabel jLabel9;
+	private JLabel jLabel10;
+	private JLabel jLabel11;
+	private JLabel jLabel12;
+	private JLabel jLabel13;
+	private JLabel jLabel14;
+	private JLabel jLabel15;
+	private JLabel jLabel16;
+	private JLabel jLabel17;
+	private JLabel jLabel18;
+	private JLabel jLabel19;
+	private JLabel jLabel20;
+	private JLabel jLabel21;
+	private JLabel jLabel22;
+	private JLabel jLabel23;
+	private JLabel jLabel24;
+	private JLabel jLabel25;
+	private JLabel jLabel26;
+	private JLabel jLabel27;
+	private JLabel jLabel28;
+	private JLabel jLabel29;
+	private JLabel jLabel30;
+	private JLabel jLabel31;
+	private JLabel jLabel32;
+	private JLabel jLabel33;
+	private JLabel jLabel34;
+	private JLabel jLabel35;
+	private JLabel jLabel36;
 	private JButton button1;
 	private JButton button2;
 	private JButton button3;
-	private JButton button4;
-	private JButton button5;
+	private JRadioButton jrButton1;
+	private JRadioButton jrButton2;
+	private JRadioButton jrButton3;
+	private JRadioButton jrButton4;
 	private JMenuBar jMenuBar1;
 	private JMenu jMenu1;
 	private JMenu jMenu2;
@@ -2144,7 +2002,6 @@ public class MainUI extends JFrame {
 	private JMenu jMenu8;
 	private JMenu jMenu9;
 	private JMenu jmenu;
-	private JMenu jmenu1;
 	private JMenuItem jmenuitem;
 	private JMenuItem jMenuItem1;
 	private JMenuItem jMenuItem2;
@@ -2188,38 +2045,7 @@ public class MainUI extends JFrame {
 	private JSeparator jSeparator2;
 	private JSeparator jSeparator3;
 	private JSeparator jSeparator4;
-	private JLabel jLabel5;
-	private JLabel jLabel6;
-	private JLabel jLabel7;
-	private JLabel jLabel8;
-	private JLabel jLabel9;
-	private JLabel jLabel10;
-	private JLabel jLabel11;
-	private JLabel jLabel12;
-	private JLabel jLabel13;
-	private JLabel jLabel14;
-	private JLabel jLabel15;
-	private JLabel jLabel16;
-	private JLabel jLabel17;
-	private JLabel jLabel18;
-	private JLabel jLabel19;
-	private JLabel jLabel20;
-	private JLabel jLabel21;
-	private JLabel jLabel22;
-	private JLabel jLabel23;
-	private JLabel jLabel24;
-	private JLabel jLabel25;
-	private JLabel jLabel26;
-	private JLabel jLabel27;
-	private JLabel jLabel28;
-	private JLabel jLabel29;
-	private JLabel jLabel30;
-	private JLabel jLabel31;
-	private JLabel jLabel32;
-	private JLabel jLabel33;
-	private JLabel jLabel34;
-	private JLabel jLabel35;
-	private JLabel jLabel36;
+
 	private JTextField jTextField1;
 	private JTextField jTextField2;
 	private JButton jButton2;

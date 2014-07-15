@@ -28,12 +28,13 @@ public class JcpUI extends JFrame {
 			public void run() {
 				try {
 					
-					JFrame.setDefaultLookAndFeelDecorated(true);
-					 JDialog.setDefaultLookAndFeelDecorated(true);
-						UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+					//JFrame.setDefaultLookAndFeelDecorated(true);
+					// JDialog.setDefaultLookAndFeelDecorated(true);
+						//UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
 						//LiquidLookAndFeel.setLiquidDecorations(true, "mac");
-						 LiquidLookAndFeel.setLiquidDecorations(true);					 
+						// LiquidLookAndFeel.setLiquidDecorations(true);					 
 					 JcpUI frame = new JcpUI();
+					 //frame.setUndecorated(true);
 					frame.setVisible(true);
 					System.out.println(JcpUI.DD_FILE_NAME);
 				} catch (Exception e) {
@@ -50,7 +51,7 @@ public class JcpUI extends JFrame {
 		
 		 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100,800, 600);
+		setBounds(100, 100,680, 500);//800£¬600
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

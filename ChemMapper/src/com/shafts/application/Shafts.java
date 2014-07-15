@@ -25,7 +25,7 @@ public class Shafts{
 	 * @param NewPath
 	 *        作业存放路径
 	 * @param inFilePath
-	 *        shafts
+	 *        input molecule
 	 * @param DataBase
 	 *        用户提交数据库
 	 * @param outputNum

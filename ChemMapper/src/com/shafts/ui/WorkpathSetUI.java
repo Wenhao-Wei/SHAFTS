@@ -79,7 +79,8 @@ public class WorkpathSetUI extends JDialog{
      	     	
      	Cancel.addActionListener(new ActionListener(){
      		public void actionPerformed(ActionEvent e){
-     			dispose();
+     			//dispose();
+     			System.exit(0);
      		}
      	});
      	OK.addActionListener(new ActionListener(){

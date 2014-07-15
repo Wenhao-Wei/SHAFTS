@@ -5,11 +5,32 @@ import org.ecust.remote.chemmapper.ChemmapperService;
 import org.ecust.remote.chemmapper.model.ChemmapperServiceModel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+/**
+ * Realize the network interface to the chemmapper
+ * @author Little-Kitty
+ * 2014-07-14
+ */
 
 public class HttpInvokerClient implements Serializable { 
 	//ChemmapperService chemmapperService = new ChemmapperService();
 	private static final long serialVersionUID = 4434285410904659989L;
+	/**
+	 * get the job id 
+	 * @param path
+	 * 		input file
+	 * @param Model
+	 * 		the screen model, there are two models called Target Navigator and Hit Explorer
+	 * @param outputnum
+	 * 		the result number
+	 * @param program
+	 * 		choose a screen method 
+	 * @param screendb
+	 * 		choose a screen database 
+	 * @param threshold
+	 * 		select the screen threshold
+	 * @return
+	 * 		return the job id
+	 */
     public String getid(String path,int Model,String outputnum, String program, String screendb, String threshold){  
         ApplicationContext context = new ClassPathXmlApplicationContext("web.xml");  
         ChemmapperService service = (ChemmapperService) context.getBean("chemmapperService");  
