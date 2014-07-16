@@ -62,10 +62,10 @@ public class PropertyConfig extends Properties{
   public static void main(String args[]){
 	  
 	  PropertyConfig properties = new PropertyConfig();
-	 // properties.createProperties("NO","weiwenhao");
+	 properties.createProperties("NO","weiwenhao");
 	  ArrayList<String> a = properties.readProperties();
-	  if(a == null)
-	  System.out.println("error");
+	  //if(a == null)
+	  System.out.println(a.get(1));
 	/*  try {		    		    
 		    //∂¡»°
 		    FileInputStream in = new FileInputStream("userinfo.properties");
