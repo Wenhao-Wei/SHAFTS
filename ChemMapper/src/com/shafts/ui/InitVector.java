@@ -48,7 +48,17 @@ public class InitVector {
 			BufferedReader bufferedReader = null;
 			String s;
 			if (!file.exists()) {
-				System.out.println("找不到.list文件");
+				for (int n = 0; n < line; n++) {
+					Vector rowVector = new Vector();
+					rowVector.add(false);
+					rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
+					data.add(rowVector);
+				}
 			} else {
 				try {
 					fileReader = new FileReader(file);

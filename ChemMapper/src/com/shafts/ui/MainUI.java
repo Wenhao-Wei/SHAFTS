@@ -1578,13 +1578,13 @@ public class MainUI extends JFrame {
 		            			usermethod = 1;
 		            			center.removeAll();
 		            			center.add(jPanel3);
-		            			center.updateUI();
+		            			jPanel3.updateUI();
 		            		}
 		            		else if(((String)jComboBox5.getSelectedItem()).equals("Use ChemMapper datatbase")){
 		            			
 		            			center.removeAll();
 		            			center.add(jPanel5);
-		            			center.updateUI();
+		            			jPanel5.updateUI();
 		            		} 	
 		       }
 			}
