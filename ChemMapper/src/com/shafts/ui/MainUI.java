@@ -3,16 +3,7 @@ package com.shafts.ui;
 import java.awt.*; //******
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
+import javax.swing.border.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -68,9 +59,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
 
 public class MainUI extends JFrame {
 
@@ -1837,15 +1826,18 @@ public class MainUI extends JFrame {
 				ArrayList<String> a = pc.readProperties();
 				if(a == null){
 					new WorkpathSetUI();
-					path = pc.getProperty("workpath");
+					//path = pc.getProperty("workpath");
 				}
 				else if((pc.getProperty("showagain")).equals("NO")){
 					new WorkpathSetUI();
-					path = pc.getProperty("workpath");
+					//path = pc.getProperty("workpath");
 				}
-				else
-					path = pc.getProperty("workpath");
-				localworkPath = path + "\\localwork\\";
+				//else
+				ArrayList<String> a1 = pc.readProperties();
+				
+				//path = pc1.getProperty("workpath");
+				path = a1.get(1);
+				localworkPath = path + "\\localwork\\";				
 				System.out.println(localworkPath);
 				networkPath = path + "\\network\\";
 				downloadPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\download\\";
