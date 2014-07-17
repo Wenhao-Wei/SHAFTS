@@ -33,13 +33,14 @@ public class InitVector {
 		if (path == null) {// initial the table
 			for (int n = 0; n < line; n++) {
 				Vector rowVector = new Vector();
+				
+				//rowVector.add("");
+				rowVector.add("");
+				rowVector.add("");
+				rowVector.add("");
+				rowVector.add("");
+				rowVector.add("");
 				rowVector.add(false);
-				rowVector.add("");
-				rowVector.add("");
-				rowVector.add("");
-				rowVector.add("");
-				rowVector.add("");
-				rowVector.add("");
 				data.add(rowVector);
 			}
 		} else {
@@ -50,13 +51,14 @@ public class InitVector {
 			if (!file.exists()) {
 				for (int n = 0; n < line; n++) {
 					Vector rowVector = new Vector();
+					
+					//rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
+					rowVector.add("");
 					rowVector.add(false);
-					rowVector.add("");
-					rowVector.add("");
-					rowVector.add("");
-					rowVector.add("");
-					rowVector.add("");
-					rowVector.add("");
 					data.add(rowVector);
 				}
 			} else {
@@ -73,13 +75,14 @@ public class InitVector {
 						if (i != 1) {
 							String[] s1 = s.split("\\s+");
 							Vector rowVector = new Vector();
-							rowVector.add(false);
+							
 							rowVector.add(s1[0]);
 							rowVector.add(s1[1]);
 							rowVector.add(s1[2]);
 							rowVector.add(s1[3]);
 							rowVector.add(s1[4]);
-							rowVector.add(s1[5]);
+							//rowVector.add(s1[5]);
+							rowVector.add(false);
 							data.add(rowVector);
 						}
 						i++;
@@ -106,13 +109,13 @@ public class InitVector {
 	 */
 	public Vector getcolumn() {
 		columnNames = new Vector();
-		columnNames.add("select");
+		//columnNames.add("Query");  //****Query
 		columnNames.add("Rank");
 		columnNames.add("Name");
 		columnNames.add("HybridScore");
 		columnNames.add("ShapeScore");
 		columnNames.add("FeatureScore");
-		columnNames.add("Query");
+		columnNames.add("ShowAll");
 		return columnNames;
 	}
 

@@ -4,42 +4,20 @@ import java.awt.*; //******
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.ecust.remote.chemmapper.ChemmapperService;
-import org.ecust.remote.chemmapper.model.ChemmapperServiceModel;
-import org.jvnet.substance.SubstanceLookAndFeel;
-import org.jvnet.substance.border.StandardBorderPainter;
-import org.jvnet.substance.button.ClassicButtonShaper;
-import org.jvnet.substance.painter.StandardGradientPainter;
-import org.jvnet.substance.skin.*;
-import org.jvnet.substance.theme.SubstanceTerracottaTheme;
-import org.jvnet.substance.watermark.SubstanceBubblesWatermark;
-import org.openbabel.*;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.birosoft.liquid.LiquidLookAndFeel;
 import com.shafts.application.CreateMolecule;
-import com.shafts.application.FormatConv;
 import com.shafts.application.Shafts;
 import com.shafts.utils.CheckUserStatus;
 //import com.shafts.application.CreateMolecule.RenderThread;
 import com.shafts.utils.JmolPanel1;
-import com.shafts.utils.JCPPanel1;
-//import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
-
+import com.shafts.utils.MyCellRenderer;
 import com.shafts.utils.PropertyConfig;
-import com.shafts.utils.ShowGif;
 import com.shafts.utils.TimerMessageDialog;
 
 import java.awt.event.ActionListener;
@@ -48,17 +26,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class MainUI extends JFrame {
@@ -586,6 +555,7 @@ public class MainUI extends JFrame {
 								data = IV.getdata(path);
 								Vector columnNames = IV.getcolumn();
 								jTable1 = new JTable();
+								jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
 								CheckTableModle tableModel = new CheckTableModle(
 										data, columnNames);
 								jTable1.setModel(tableModel);
@@ -675,6 +645,7 @@ public class MainUI extends JFrame {
 								Vector columnNames = IV.getcolumn();
 								southJPanel.removeAll();
 								jTable1 = new JTable();
+								jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
 								CheckTableModle tableModel = new CheckTableModle(
 										data, columnNames);
 								jTable1.setModel(tableModel);
@@ -1356,7 +1327,7 @@ public class MainUI extends JFrame {
 		jButton8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				FormatConvUI formatconv = new FormatConvUI();
+				new FormatConvUI();
 				// formatconv.setVisible(true);
 			}
 		});
@@ -1484,10 +1455,6 @@ public class MainUI extends JFrame {
 		panel2.add(jComboBox1);
 		panel3.add(jLabel3);
 		panel3.add(jtextField1);
-		//jrButton1 = new JRadioButton("Upload a datatbase:");
-		//jrButton1.setBorder(new EmptyBorder(0,0,0,0));
-		//jrButton2 = new JRadioButton("Use ChemMapper datatbase:");
-		//jrButton2.setBorder(new EmptyBorder(0,0,0,0));
 		jrButton1 = new JRadioButton("Bioactivity Database");
 		jrButton2 = new JRadioButton("Compound Datatbase:");
 		jrButton1.addActionListener(new ActionListener(){
@@ -1512,11 +1479,15 @@ public class MainUI extends JFrame {
 		button1.addActionListener(new ActionListener() { // 打开数据库文件
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
-				file.showOpenDialog(null);
-				Filepath = file.getSelectedFile().getAbsolutePath();
-				File file1 = new File(Filepath);
-				jtextField2.setText(file1.getName()); // 显示选择的数据库名
-				DataBase = Filepath;
+				file.setMultiSelectionEnabled(false);
+				int result = file.showSaveDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					Filepath = file.getSelectedFile().getAbsolutePath();
+					File file1 = new File(Filepath);
+					jtextField2.setText(file1.getName()); // 显示选择的数据库名
+					DataBase = Filepath;
+				}
+				
 				//System.out.println(inFormat);
 
 			}
@@ -1590,8 +1561,8 @@ public class MainUI extends JFrame {
 		jPanel7.add(button2);
 		north.add(jPanel1);
 		//north.add(jPanel2);
-		center.add(jPanel3);
-		south.add(jPanel7,BorderLayout.CENTER);
+		center.add(jPanel3);		
+		south.add(jPanel7,BorderLayout.SOUTH);
 		
 		westchildPanel.add(north,BorderLayout.NORTH);
 		westchildPanel.add(center,BorderLayout.CENTER);
@@ -1623,6 +1594,7 @@ public class MainUI extends JFrame {
 										southJPanel.removeAll();
 										southJPanel.updateUI();
 										jTable1 = new JTable();
+										jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
 										CheckTableModle tableModel = new CheckTableModle(data,columnNames);
 										jTable1.setModel(tableModel);
 										jTable1.getTableHeader().setDefaultRenderer(new CheckHeaderCellRenderer(jTable1));
@@ -1722,6 +1694,7 @@ public class MainUI extends JFrame {
 									data = IV.getdata(path);
 									Vector columnNames = IV.getcolumn();
 									jTable1 = new JTable();
+									jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
 									CheckTableModle tableModel = new CheckTableModle(
 											data, columnNames);
 									jTable1.setModel(tableModel);
@@ -1797,9 +1770,12 @@ public class MainUI extends JFrame {
 		Vector columnNames = IV.getcolumn();
 		CheckTableModle tableModel = new CheckTableModle(data, columnNames);
 		jTable1 = new JTable();
+		jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
 		jTable1.setModel(tableModel);
 		jTable1.getTableHeader().setDefaultRenderer(
 				new CheckHeaderCellRenderer(jTable1));
+		TableColumn column = jTable1.getColumnModel().getColumn(5);
+        column.setPreferredWidth(100);
 		JScrollPane jScrollPane1 = new JScrollPane(jTable1);
 		southJPanel.add(jScrollPane1);
 

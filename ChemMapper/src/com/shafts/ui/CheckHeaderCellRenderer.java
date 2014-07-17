@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 public class CheckHeaderCellRenderer implements TableCellRenderer {
     CheckTableModle tableModel;
@@ -21,14 +22,23 @@ public class CheckHeaderCellRenderer implements TableCellRenderer {
     public CheckHeaderCellRenderer(JTable table) {
         this.tableModel = (CheckTableModle)table.getModel();
         this.tableHeader = table.getTableHeader();
-        selectBox = new JCheckBox(tableModel.getColumnName(0));
+       // TableColumn column = table.getColumnModel().getColumn(0);
+       // column.setPreferredWidth(100);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        table.getColumnModel().getColumn(0).setPreferredWidth(80);
+        table.getColumnModel().getColumn(1).setPreferredWidth(250);
+        table.getColumnModel().getColumn(2).setPreferredWidth(250);
+        table.getColumnModel().getColumn(3).setPreferredWidth(250);
+        table.getColumnModel().getColumn(4).setPreferredWidth(250);
+        table.getColumnModel().getColumn(5).setPreferredWidth(80);
+        selectBox = new JCheckBox(tableModel.getColumnName(5)); //************0
         selectBox.setSelected(false);
         tableHeader.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() > 0) {
                     //获得选中列
                     int selectColumn = tableHeader.columnAtPoint(e.getPoint());
-                    if (selectColumn == 0) {
+                    if (selectColumn == 5) {
                         boolean value = !selectBox.isSelected();
                         selectBox.setSelected(value);
                         tableModel.selectAllOrNull(value);
@@ -48,8 +58,8 @@ public class CheckHeaderCellRenderer implements TableCellRenderer {
         label.setHorizontalAlignment(SwingConstants.CENTER); // 表头标签剧中
         selectBox.setHorizontalAlignment(SwingConstants.CENTER);// 表头标签剧中
         selectBox.setBorderPainted(true);
-        JComponent component = (column == 0) ? selectBox : label;
-
+        JComponent component = (column == 5) ? selectBox : label;
+        
         component.setForeground(tableHeader.getForeground());
         component.setBackground(tableHeader.getBackground());
         component.setFont(tableHeader.getFont());
