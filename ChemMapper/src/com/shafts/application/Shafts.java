@@ -92,7 +92,7 @@ public class Shafts{
 	public Vector getdata(){
 		String path = workPath + "\\Result.list";
 		IV = new InitVector();
-		workdata = IV.getdata(path);
+		workdata = IV.getdata(path,null);
 		return workdata;
 	}
 	private String LocalworkID;

@@ -16,7 +16,7 @@ public class CheckTableModle extends DefaultTableModel {
         super(data, columnNames);
         
     }
-    public boolean isCellEditable(int row,int column){         //设置第一列（复选框）可编辑
+    public boolean isCellEditable(int row,int column){         //设置最后列（复选框）可编辑
         if(column == 5){
            return true;
         }else{

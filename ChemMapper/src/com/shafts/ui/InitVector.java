@@ -25,7 +25,7 @@ public class InitVector {
 	 * 
 	 * @param path
 	 */
-	public Vector getdata(String path) {
+	public Vector getdata(String path, String path1) {
 		data = new Vector();
 		int i = 1;
 		int flag = 0;
@@ -63,6 +63,15 @@ public class InitVector {
 				}
 			} else {
 				try {
+					Vector rowVector1 = new Vector();
+					rowVector1.add("1");
+					rowVector1.add("InputFile");
+					rowVector1.add("Full");
+					rowVector1.add("Full");
+					rowVector1.add("Full");
+					//rowVector.add(s1[5]);
+					rowVector1.add(true);
+					data.add(rowVector1);
 					fileReader = new FileReader(file);
 					bufferedReader = new BufferedReader(fileReader);
 					while (bufferedReader.readLine() != null)
@@ -121,7 +130,7 @@ public class InitVector {
 
 	public static void main(String args[]) {
 		Vector V = new InitVector()
-				.getdata("E:\\MyOffice\\Eclipse\\workplace\\ChemMapper\\workhome\\localwork\\Job9\\Result.list");
+				.getdata("E:\\MyOffice\\Eclipse\\workplace\\ChemMapper\\workhome\\localwork\\Job9\\Result.list","E:\\MyOffice\\Eclipse\\workplace\\ChemMapper\\workhome\\localwork\\Job9\\Input.mol2");
 		// String[] v = (String[]) V.toArray();
 		for (int i = 0; i < V.size(); i++) {
 			System.out.println(V.elementAt(i));

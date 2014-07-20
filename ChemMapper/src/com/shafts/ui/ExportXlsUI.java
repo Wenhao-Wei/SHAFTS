@@ -206,20 +206,20 @@ public class ExportXlsUI extends JFrame {
 				HSSFCell cell3 = row.createCell(2);
 				HSSFCell cell4 = row.createCell(3);
 				HSSFCell cell5 = row.createCell(4);
-				HSSFCell cell6 = row.createCell(5);
+				//HSSFCell cell6 = row.createCell(5);
 				// 定义单元格为字符串类型
 				cell1.setCellType(HSSFCell.CELL_TYPE_STRING);
 				cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
 				cell3.setCellType(HSSFCell.CELL_TYPE_STRING);
 				cell4.setCellType(HSSFCell.CELL_TYPE_STRING);
 				cell5.setCellType(HSSFCell.CELL_TYPE_STRING);
-				cell6.setCellType(HSSFCell.CELL_TYPE_STRING);
+				//cell6.setCellType(HSSFCell.CELL_TYPE_STRING);
 				cell1.setCellValue("Rank");
 				cell2.setCellValue("Name");
 				cell3.setCellValue("HybridScore");
 				cell4.setCellValue("ShapeScore");
 				cell5.setCellValue("FeatureScore");
-				cell6.setCellValue("Query");
+				//cell6.setCellValue("Query");
 
 				int Row = 1;
 				int RowCount = table.getRowCount();
@@ -229,8 +229,8 @@ public class ExportXlsUI extends JFrame {
 				int k; // k为列
 				while (i <= j) { // i为表的行数 第一行为表头
 					row = sheet.createRow(Row);
-					for (k = 1; k < 7; k++) {
-						HSSFCell cell = row.createCell(k - 1);
+					for (k = 0; k < 5; k++) {
+						HSSFCell cell = row.createCell(k);
 						String s = (String) table.getValueAt(i - 1, k);
 						// 设置单元格格式
 						cell.setCellStyle(cellStyle);

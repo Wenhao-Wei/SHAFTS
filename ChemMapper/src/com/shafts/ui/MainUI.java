@@ -4,6 +4,7 @@ import java.awt.*; //******
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -26,6 +27,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -41,8 +43,9 @@ public class MainUI extends JFrame {
 	 * Launch the application.
 	 */
 	static LaunchAnimation LA;
+
 	public static void main(String[] args) {
-		
+
 		new Thread() {
 			public void run() {
 				LA = new LaunchAnimation();
@@ -55,7 +58,7 @@ public class MainUI extends JFrame {
 			public void run() {
 				try { // 设置外观
 					JFrame.setDefaultLookAndFeelDecorated(true);
-					//JDialog.setDefaultLookAndFeelDecorated(true);
+					// JDialog.setDefaultLookAndFeelDecorated(true);
 
 					// UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
 					// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -294,20 +297,24 @@ public class MainUI extends JFrame {
 		// "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\network\\";
 		File f1 = new File(localworkPath);
 		File f2 = new File(networkPath);
+		if (!f1.exists())
+			f1.mkdir();
+		if (!f2.exists())
+			f2.mkdir();
 		File[] listdir1 = f1.listFiles();
 		File[] listdir2 = f2.listFiles();
-		if(f1!=null){
+		if (listdir1 != null) {
 			for (int i = 0; i < listdir1.length; i++) {
 				String nodename = listdir1[i].getName();
 				addlocalnode(nodename);
-				}
 			}
-		if(f2!=null){
+		}
+		if (listdir2 != null) {
 			for (int i = 0; i < listdir2.length; i++) {
 				String nodename = listdir2[i].getName();
 				addnetnode(nodename);
-				}
 			}
+		}
 		LocalTree.setEditable(true);
 		NetTree.setEditable(true);
 		LocalTree.updateUI();
@@ -393,51 +400,169 @@ public class MainUI extends JFrame {
 		 * @author baoabo
 		 *
 		 */
-		class ShowMol extends MouseAdapter {
-			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON1) {// 单击鼠标左键
-					if (e.getClickCount() == 2) {
-						String stringName[] = new String[20];
+		
+	/*	class ShowMol extends MouseAdapter { 
+			public void mouseClicked(MouseEvent e) { 
+				if (e.getButton() == MouseEvent.BUTTON1) {// 单击鼠标左键 
+					if (e.getClickCount() == 1 && jTable1.getSelectedColumn() == 5) { 
+						String stringName[] = new String[20]; 
 						int colummCount = jTable1.getModel().getColumnCount();// 列数
-						int rowCount = jTable1.getModel().getRowCount();// 行数
+						int rowCount = jTable1.getModel().getRowCount();// 行数 
 						for (int i = 1; i < colummCount; i++)
-							stringName[i] = jTable1.getModel()
-									.getValueAt(jTable1.getSelectedRow(), i)
-									.toString();
-						show3Dname = stringName[2];
-						String path1 = FilePath1 + show3Dname + ".mol2";
-						File mol2file = new File(path1);
-						if (!mol2file.exists()) {
-							show3Dname = stringName[1];
-						}
-						boolean bl = (boolean) jTable1.getModel().getValueAt(
-								jTable1.getSelectedRow(), 0);
-						String path2 = FilePath1 + show3Dname + ".mol2";
+							stringName[i] = jTable1.getModel().getValueAt(jTable1.getSelectedRow(), i) .toString(); 
+						show3Dname = stringName[2]; 
+						String path1 = FilePath1 + show3Dname + ".mol2"; 
+						File mol2file = new File(path1); 
+						if (!mol2file.exists()) { 
+							show3Dname = stringName[1]; 
+							}
+						boolean bl = (boolean)jTable1.getModel().getValueAt( jTable1.getSelectedRow(), 0); 
+						String path2 = FilePath1 + show3Dname + ".mol2"; 
 						if (bl == false) {
-							jTable1.getModel().setValueAt(true,
-									jTable1.getSelectedRow(), 0);
-							flag++;
-							ifshow.put(show3Dname, new Integer(flag));
-							String controller1 = "load APPEND " + "\"" + path2
-									+ "\"" + " ;frame*";
-							String controller2 = "dots on";
+							jTable1.getModel().setValueAt(true, jTable1.getSelectedRow(), 0);
+							flag++; 
+							ifshow.put(show3Dname, new Integer(flag)); 
+							String controller1 = "load APPEND " + "\"" + path2 + "\"" + " ;frame*"; 
+							String controller2 = "dots on"; 
 							jmolPanel2.viewer.evalString(controller1);
-							jmolPanel2.viewer.evalString(controller2);
-						} else {
-							jTable1.getModel().setValueAt(false,
-									jTable1.getSelectedRow(), 0);
-							int a = (int) ifshow.get(show3Dname);
-							String b = a + ".1";
-							String controller = "zap " + b;
+							jmolPanel2.viewer.evalString(controller2); 
+							} 
+						else {
+							jTable1.getModel().setValueAt(false, jTable1.getSelectedRow(), 0);
+							int a = (int) ifshow.get(show3Dname); String b = a + ".1"; 
+							String controller = "zap " + b; 
 							jmolPanel2.viewer.evalString(controller);
-							ifshow.remove(show3Dname);
-							if (ifshow.isEmpty())
-								flag = 0;
-						}
-					}
+							ifshow.remove(show3Dname); 
+							if (ifshow.isEmpty()) flag = 0; 
+							} 
+						} 
+					} 
+				} 
+			}*/
+		class ShowAll extends MouseAdapter{
+			public void mouseClicked(MouseEvent e) { 
+				if (e.getClickCount() > 0) {
+                    //获得选中列
+                	String stringName1[] = new String[20];
+                	int rowCount = jTable1.getModel().getRowCount();// 行数
+                    int selectColumn = header.columnAtPoint(e.getPoint());
+                    if (selectColumn == 5) {
+                    	boolean selectAll = (boolean)jTable1.getModel().getValueAt( 1, 5);
+                    	if(selectAll){
+                    		flag = 0;
+							ifshow.clear();
+							String controller = "zap all"; 
+							jmolPanel2.viewer.evalString(controller);
+							InputFilepath = FilePath1 + "Input.mol2";
+							String controller1 = "load APPEND " + "\"" + InputFilepath
+									+ "\"" + " ;frame*" + " ;dots on";
+							jmolPanel2.viewer.evalString(controller1);
+							flag++;
+							ifshow.put("Input", new Integer(flag));
+							for (int i = 1; i < rowCount; i++){
+								for (int j = 1; j < jTable1.getModel().getColumnCount(); j++)
+									stringName1[j] = jTable1.getModel().getValueAt(i, j) .toString(); 
+									show3Dname = stringName1[1]; 
+									String path3 = FilePath1 + show3Dname + ".mol2"; 
+									File mol2file2 = new File(path3); 
+									if (!mol2file2.exists()) 
+										show3Dname = stringName1[0];
+										flag++; 
+										ifshow.put(show3Dname, new Integer(flag)); 
+										String controller2 = "load APPEND " + "\"" + path3 + "\"" + " ;frame*" + " ;dots on"; 
+										//String controller2 = ""; 
+										jmolPanel2.viewer.evalString(controller2);
+									
+								}
+                    		}
+                    	else{
+                    		flag = 0;
+							ifshow.clear();
+							String controller = "zap all"; 
+							jmolPanel2.viewer.evalString(controller);
+                    	}
+                    }
+                }
 				}
+		}
+		class ShowMol extends MouseAdapter { 
+			public void mouseClicked(MouseEvent e) { 
+				if (e.getButton() == MouseEvent.BUTTON1) {// 单击鼠标左键 
+					String stringName[] = new String[20]; 
+					int colummCount = jTable1.getModel().getColumnCount();// 列数					 
+					for (int i = 1; i < colummCount; i++)
+						stringName[i] = jTable1.getModel().getValueAt(jTable1.getSelectedRow(), i) .toString(); 
+					show3Dname = stringName[1]; 
+					String path1 = FilePath1 + show3Dname + ".mol2"; 
+					File mol2file = new File(path1); 
+					if (!mol2file.exists())  
+						show3Dname = stringName[0];						
+					boolean bl = (boolean)jTable1.getModel().getValueAt( jTable1.getSelectedRow(), 5); 
+					String path2 = FilePath1 + show3Dname + ".mol2"; 					                  		                    
+					if (e.getClickCount() == 1 && jTable1.getSelectedColumn() == 5) { 						
+						if (bl) {
+							//jTable1.getModel().setValueAt(true, jTable1.getSelectedRow(), 5);
+							if(jTable1.getSelectedRow() == 0){
+									String controller1 = "load APPEND " + "\"" + InputFilepath
+											+ "\"" + " ;frame*" + " ;dots on";
+									jmolPanel2.viewer.evalString(controller1);
+									int newflag = 0;
+									Iterator iter = ifshow.entrySet().iterator();
+									while(iter.hasNext()){
+										 Map.Entry entry = (Map.Entry)iter.next(); //得到这个序列的映射项，就是set中的类型，HashMap都是Map.Entry类型（详情见map接口声明）
+									     String key = (String)entry.getKey(); //获得key
+									     int value = (int)entry.getValue(); //获得value，都要强制转换一下
+									     if(newflag < value)
+									    	 newflag = value;
+									}
+									newflag = newflag+1;
+									ifshow.put("Input", new Integer(newflag));
+								}
+							else{	
+									int newflag = 0;
+									Iterator iter = ifshow.entrySet().iterator();
+									while(iter.hasNext()){
+										 Map.Entry entry = (Map.Entry)iter.next(); //得到这个序列的映射项，就是set中的类型，HashMap都是Map.Entry类型（详情见map接口声明）
+									     String key = (String)entry.getKey(); //获得key
+									     int value = (int)entry.getValue(); //获得value，都要强制转换一下
+									     if(newflag < value)
+									    	 newflag = value;
+									}
+									newflag = newflag+1;
+								ifshow.put(show3Dname, new Integer(newflag)); 
+								String controller1 = "load APPEND " + "\"" + path2 + "\"" + " ;frame*" + " ;dots on"; 
+								//String controller2 = ""; 
+								jmolPanel2.viewer.evalString(controller1);
+								//jmolPanel2.viewer.evalString(controller2); 
+								} 
+							}
+						else {
+							if(jTable1.getSelectedRow() == 0){
+									int a = (int) ifshow.get("Input"); 
+									String b = a + ".1";
+									String controller = "zap " + b; 
+									jmolPanel2.viewer.evalString(controller);
+									ifshow.remove("Input"); 
+									if (ifshow.isEmpty()) 
+										flag = 0; 
+								}
+								//jTable1.getModel().setValueAt(false, jTable1.getSelectedRow(), 5);
+								else{
+									int a = (int) ifshow.get(show3Dname); 
+									String b = a + ".1"; 
+									String controller = "zap " + b; 
+									jmolPanel2.viewer.evalString(controller);
+									ifshow.remove(show3Dname); 
+									if (ifshow.isEmpty()) 
+										flag = 0; 
+								}
+							} 
+						} 
+					} 
+				} 
 			}
-		}		
+		 
+
 		/**
 		 * 2D编辑对应的三维显示
 		 * 
@@ -456,8 +581,7 @@ public class MainUI extends JFrame {
 				jTextField1.setText(filePath);
 				while (true) {
 					if (file3.exists() && file3.lastModified() > lastmodified1) {
-						jmolPanel2.viewer
-								.openFile(filePath);//CreateMolecule.RENDER_FILE_NAME
+						jmolPanel2.viewer.openFile(filePath);// CreateMolecule.RENDER_FILE_NAME
 						String bandian = "dots on";
 						jmolPanel2.viewer.evalString(bandian); // 修改 2014.1.2
 						lastmodified1 = file3.lastModified();
@@ -518,7 +642,7 @@ public class MainUI extends JFrame {
 						F = false;
 					}
 					// System.out.println(flag);
-					if (nodeName == null || nodeName == "网络任务")
+					if (nodeName == null || nodeName == "NetWork")
 						F = false;
 					if (F) {
 						setnetpop();
@@ -539,7 +663,7 @@ public class MainUI extends JFrame {
 								nodeName = treenode.toString();
 							} catch (NullPointerException ne) {
 							}
-							if (!nodeName.equals("网络任务")) {
+							if (!nodeName.equals("NetWork")) {
 								FilePath1 = networkPath + nodeName + "\\";
 								String name = new ListFinder(FilePath1)
 										.GetList(FilePath1);
@@ -552,23 +676,33 @@ public class MainUI extends JFrame {
 								southJPanel.removeAll();
 								// southJPanel.updateUI();
 								String path = FilePath1 + name;
-								data = IV.getdata(path);
+								data = IV.getdata(path,FilePath1);
 								Vector columnNames = IV.getcolumn();
 								jTable1 = new JTable();
-								jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
+								jTable1.setDefaultRenderer(String.class,
+										new MyCellRenderer());
 								CheckTableModle tableModel = new CheckTableModle(
 										data, columnNames);
 								jTable1.setModel(tableModel);
 								jTable1.getTableHeader().setDefaultRenderer(
 										new CheckHeaderCellRenderer(jTable1));
 								jTable1.addMouseListener(new ShowMol());
+								header = jTable1.getTableHeader();
+								header.addMouseListener(new ShowAll());
 								JScrollPane jScrollPane1 = new JScrollPane(
 										jTable1);
 								southJPanel.add(jScrollPane1);
 								southJPanel.updateUI();
+								jmolPanel2.viewer.evalString("zap all");
 								flag = 0;
 								// ifshow.clear();
 								ifshow = new Hashtable<String, Integer>();
+								flag++;
+								ifshow.put("Input", new Integer(flag));
+								InputFilepath = FilePath1 + "Input.mol2";
+								String controller1 = "load APPEND " + "\"" + InputFilepath
+										+ "\"" + " ;frame*" + " ;dots on";
+								jmolPanel2.viewer.evalString(controller1);
 							}
 						}
 					}.start();
@@ -615,7 +749,7 @@ public class MainUI extends JFrame {
 						F = false;
 					}
 					// System.out.println(flag);
-					if (nodeName == null || nodeName == "Local Job")
+					if (nodeName == null || nodeName == "LocalJob")
 						F = false;
 					if (F) {
 						setlocalpop();
@@ -636,16 +770,17 @@ public class MainUI extends JFrame {
 								nodeName = treenode.toString();
 							} catch (NullPointerException ne) {
 							}
-							if (!nodeName.equals("Local Job")) {
+							if (!nodeName.equals("LocalJob")) {
 								FilePath1 = localworkPath + nodeName + "\\";
 								String name = new ListFinder(FilePath1)
 										.GetList(FilePath1);
 								String path = FilePath1 + name;
-								data = IV.getdata(path);
+								data = IV.getdata(path,null);
 								Vector columnNames = IV.getcolumn();
 								southJPanel.removeAll();
 								jTable1 = new JTable();
-								jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
+								jTable1.setDefaultRenderer(String.class,
+										new MyCellRenderer());
 								CheckTableModle tableModel = new CheckTableModle(
 										data, columnNames);
 								jTable1.setModel(tableModel);
@@ -805,7 +940,8 @@ public class MainUI extends JFrame {
 		jMenuItem1.setText("	Open File...	");
 		jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
+				JFileChooser file = new JFileChooser(
+						"D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
 				file.showOpenDialog(null);
 				file.setDialogTitle("Please choose the input file...");
 				inFilePath = file.getSelectedFile().getAbsolutePath();
@@ -814,7 +950,7 @@ public class MainUI extends JFrame {
 				jmolPanel2.viewer.evalString(bandian);
 				File file11 = new File(inFilePath);
 				jtextField3.setText(file11.getName());
-				//jTextField1.setText(inFilePath);
+				// jTextField1.setText(inFilePath);
 			}
 		});
 		jMenu1.add(jMenuItem1);
@@ -947,8 +1083,8 @@ public class MainUI extends JFrame {
 		});
 		jMenu5.add(jMenuItem13);
 		/**
-		 * *******************set the molecule surface************************************
-		 * 2014-07-14
+		 * *******************set the molecule
+		 * surface************************************ 2014-07-14
 		 **/
 		jMenuItem26.setText("	Dot Surface	");
 		jMenuItem26.addActionListener(new java.awt.event.ActionListener() {
@@ -1394,10 +1530,11 @@ public class MainUI extends JFrame {
 		northJPanel.add(jMenuBar1);
 		northJPanel.add(iconPanel);
 
-		/*******************************************WestPanel*************************************
-		 * To carry on the functions of molecular screening
-		 * 2014-07-14
-		 * *****************************************Wenhao Wei************************************
+		/*******************************************
+		 * WestPanel************************************* To carry on the
+		 * functions of molecular screening 2014-07-14
+		 * *****************************************Wenhao
+		 * Wei************************************
 		 */
 		usermethod = 1;
 		westJPanel.setLayout(new GridLayout());
@@ -1405,26 +1542,28 @@ public class MainUI extends JFrame {
 		westchildPanel = new JPanel();
 		jlabel1 = new JLabel("Smilarity Method:");
 		jLabel1 = new JLabel("(Note:File size must less than 10MB!)");
-		jButton11 = new JButton("Export");              //****************export the result
+		jButton11 = new JButton("Export"); // ****************export the result
 		north = new JPanel(new GridLayout());
 		center = new JPanel(new GridLayout());
-		south = new JPanel();				
+		south = new JPanel();
 		jSeparator1 = new JSeparator();
-		jPanel1 = new JPanel(new GridLayout(5, 1,10,10));
-		panel1 = new JPanel(new GridLayout(1, 2,0,10));
-		panel2 = new JPanel(new GridLayout(1, 2,0,10));
-		panel3 = new JPanel(new GridLayout(1, 2,0,10));
-		jPanel2 = new JPanel(new GridLayout(1, 1,0,10));
+		jPanel1 = new JPanel(new GridLayout(5, 1, 10, 10));
+		panel1 = new JPanel(new GridLayout(1, 2, 0, 10));
+		panel2 = new JPanel(new GridLayout(1, 2, 0, 10));
+		panel3 = new JPanel(new GridLayout(1, 2, 0, 10));
+		jPanel2 = new JPanel(new GridLayout(1, 1, 0, 10));
 		jPanel1.add(panel1);
 		jPanel1.add(panel2);
 		jPanel1.add(panel3);
 		jPanel1.add(jPanel2);
 		jPanel1.add(jSeparator1);
-		jPanel3 = new JPanel(new GridLayout(5, 1,10,10));   //upload database panel
-		jPanel4 = new JPanel(new GridLayout(1, 2,70,10));
-		jPanel5 = new JPanel(new GridLayout(5, 1,10,10));    //chemmapper database panel
-		jPanel6 = new JPanel(new GridLayout(1, 2,30,10));
-		jPanel7 = new JPanel(new GridLayout(1, 2,70,10));
+		jPanel3 = new JPanel(new GridLayout(5, 1, 10, 10)); // upload database
+															// panel
+		jPanel4 = new JPanel(new GridLayout(1, 2, 70, 10));
+		jPanel5 = new JPanel(new GridLayout(5, 1, 10, 10)); // chemmapper
+															// database panel
+		jPanel6 = new JPanel(new GridLayout(1, 2, 30, 10));
+		jPanel7 = new JPanel(new GridLayout(1, 2, 70, 10));
 		checkbox = new JCheckBox("Gernerated Conformers");
 		jLabel4 = new JLabel("Input Molecule:");
 		jtextField3 = new JTextField();
@@ -1436,8 +1575,9 @@ public class MainUI extends JFrame {
 		jComboBox3 = new JComboBox();
 		jComboBox4 = new JComboBox();
 		jComboBox5 = new JComboBox();
-		
-		jComboBox1.setModel(new DefaultComboBoxModel(new String[] { "0.8", "1.0", "1.2", "1.5", "1.8"}));
+
+		jComboBox1.setModel(new DefaultComboBoxModel(new String[] { "0.8",
+				"1.0", "1.2", "1.5", "1.8" }));
 		jComboBox1.setSelectedItem("1.2");
 		threshold = "1.2";
 		jComboBox1.addItemListener(new ItemListener() {
@@ -1457,20 +1597,20 @@ public class MainUI extends JFrame {
 		panel3.add(jtextField1);
 		jrButton1 = new JRadioButton("Bioactivity Database");
 		jrButton2 = new JRadioButton("Compound Datatbase:");
-		jrButton1.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+		jrButton1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				usermethod = 2;
 				jComboBox2.setEnabled(true);
 				jComboBox3.setEnabled(false);
 			}
-		});	
-		jrButton2.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+		});
+		jrButton2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				usermethod = 3;
 				jComboBox3.setEnabled(true);
 				jComboBox2.setEnabled(false);
 			}
-		});	
+		});
 		ButtonGroup bg1 = new ButtonGroup();
 		bg1.add(jrButton1);
 		bg1.add(jrButton2);
@@ -1478,7 +1618,8 @@ public class MainUI extends JFrame {
 		button1 = new JButton("Browse");
 		button1.addActionListener(new ActionListener() { // 打开数据库文件
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser file = new JFileChooser("D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
+				JFileChooser file = new JFileChooser(
+						"D:\\MyOffice\\Github\\SHAFTS\\ChemMapper");
 				file.setMultiSelectionEnabled(false);
 				int result = file.showSaveDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -1487,8 +1628,8 @@ public class MainUI extends JFrame {
 					jtextField2.setText(file1.getName()); // 显示选择的数据库名
 					DataBase = Filepath;
 				}
-				
-				//System.out.println(inFormat);
+
+				// System.out.println(inFormat);
 
 			}
 		});
@@ -1497,9 +1638,11 @@ public class MainUI extends JFrame {
 		jPanel4.add(button1);
 		jPanel3.add(jPanel4);
 		jPanel3.add(checkbox);
-		jPanel3.add(jLabel1);		
-		
-		jComboBox2.setModel(new DefaultComboBoxModel(new String[] { "Choose...", "DrugBank", "ChEMBL", "BindingDB","KEGG", "PDB" }));
+		jPanel3.add(jLabel1);
+
+		jComboBox2
+				.setModel(new DefaultComboBoxModel(new String[] { "Choose...",
+						"DrugBank", "ChEMBL", "BindingDB", "KEGG", "PDB" }));
 		jComboBox2.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -1509,7 +1652,8 @@ public class MainUI extends JFrame {
 			}
 		}); // 待添加2013.12.05
 		jComboBox2.setEnabled(false);
-		jComboBox3.setModel(new DefaultComboBoxModel(new String[] { "Choose...", "MayBridge", "Specs", "ZINC", "NCI" }));
+		jComboBox3.setModel(new DefaultComboBoxModel(new String[] {
+				"Choose...", "MayBridge", "Specs", "ZINC", "NCI" }));
 		jComboBox3.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -1519,34 +1663,39 @@ public class MainUI extends JFrame {
 			}
 		});
 		jComboBox3.setEnabled(false);
-		jComboBox4.setModel(new DefaultComboBoxModel(new String[] { "Choose...", "SHAFTS","USR" }));
+		jComboBox4.setModel(new DefaultComboBoxModel(new String[] {
+				"Choose...", "SHAFTS", "USR" }));
 		jComboBox4.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {       
-		            	if(e.getStateChange() == ItemEvent.SELECTED){  
-		            		if(((String)jComboBox4.getSelectedItem()).equals("SHAFTS"))
-		            	  model2="FeatureAlign";
-		            		else if(((String)jComboBox4.getSelectedItem()).equals("USR"))
-		            			model2="ShapeFilter"; 	
-		       }
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					if (((String) jComboBox4.getSelectedItem())
+							.equals("SHAFTS"))
+						model2 = "FeatureAlign";
+					else if (((String) jComboBox4.getSelectedItem())
+							.equals("USR"))
+						model2 = "ShapeFilter";
+				}
 			}
 		});
-		jComboBox5.setModel(new DefaultComboBoxModel(new String[] {"Upload a datatbase","Use ChemMapper datatbase" }));
+		jComboBox5.setModel(new DefaultComboBoxModel(new String[] {
+				"Upload a datatbase", "Use ChemMapper datatbase" }));
 		jComboBox5.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {       
-		            	if(e.getStateChange() == ItemEvent.SELECTED){  
-		            		if(((String)jComboBox5.getSelectedItem()).equals("Upload a datatbase")){
-		            			usermethod = 1;
-		            			center.removeAll();
-		            			center.add(jPanel3);
-		            			jPanel3.updateUI();
-		            		}
-		            		else if(((String)jComboBox5.getSelectedItem()).equals("Use ChemMapper datatbase")){
-		            			
-		            			center.removeAll();
-		            			center.add(jPanel5);
-		            			jPanel5.updateUI();
-		            		} 	
-		       }
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					if (((String) jComboBox5.getSelectedItem())
+							.equals("Upload a datatbase")) {
+						usermethod = 1;
+						center.removeAll();
+						center.add(jPanel3);
+						jPanel3.updateUI();
+					} else if (((String) jComboBox5.getSelectedItem())
+							.equals("Use ChemMapper datatbase")) {
+
+						center.removeAll();
+						center.add(jPanel5);
+						jPanel5.updateUI();
+					}
+				}
 			}
 		});
 		jPanel6.add(jlabel1);
@@ -1556,72 +1705,83 @@ public class MainUI extends JFrame {
 		jPanel5.add(jComboBox2);
 		jPanel5.add(jrButton2);
 		jPanel5.add(jComboBox3);
-		button2 = new JButton("Start");        //start screen
+		button2 = new JButton("Start"); // start screen
 		jPanel7.add(jButton11);
 		jPanel7.add(button2);
 		north.add(jPanel1);
-		//north.add(jPanel2);
-		center.add(jPanel3);		
-		south.add(jPanel7,BorderLayout.SOUTH);
-		
-		westchildPanel.add(north,BorderLayout.NORTH);
-		westchildPanel.add(center,BorderLayout.CENTER);
-		westchildPanel.add(south,BorderLayout.SOUTH);
-		jTabbedPane1.add( "Similarity",westchildPanel);
+		// north.add(jPanel2);
+		center.add(jPanel3);
+		south.add(jPanel7, BorderLayout.SOUTH);
+
+		westchildPanel.add(north, BorderLayout.NORTH);
+		westchildPanel.add(center, BorderLayout.CENTER);
+		westchildPanel.add(south, BorderLayout.SOUTH);
+		jTabbedPane1.add("Similarity", westchildPanel);
 		westJPanel.add(jTabbedPane1);
-		
+
 		button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String st = jtextField3.getText();
 				outputNum = jtextField1.getText();
 				System.out.println(threshold);
 				if (st.isEmpty())
-					JOptionPane.showMessageDialog(null, "Please select the input molecule！");
+					JOptionPane.showMessageDialog(null,
+							"Please select the input molecule！");
 				else {
-						switch(usermethod){
-							case 1:	if(DataBase == null)
-										JOptionPane.showMessageDialog(null, "Please select the input molecule！");
-									else{
-										NewPath = localworkPath + "Job";
-										Shafts sf = new Shafts();
-										sf.shaftinit(NewPath, inFilePath, DataBase, outputNum,threshold);
-										String workid = sf.getworkid();
-										addlocalnode(workid);
-										FilePath1 = localworkPath + workid + "\\";
-										String path = NewPath + "\\Result.list";
-										data = sf.getdata();
-										Vector columnNames = IV.getcolumn();
-										southJPanel.removeAll();
-										southJPanel.updateUI();
-										jTable1 = new JTable();
-										jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
-										CheckTableModle tableModel = new CheckTableModle(data,columnNames);
-										jTable1.setModel(tableModel);
-										jTable1.getTableHeader().setDefaultRenderer(new CheckHeaderCellRenderer(jTable1));
-										jTable1.addMouseListener(new ShowMol());
-										JScrollPane jScrollPane1 = new JScrollPane(jTable1);
-										southJPanel.add(jScrollPane1);
-										southJPanel.updateUI();
-										flag = 0;
-										ifshow = new Hashtable<String, Integer>();
-									}
-									break;
-							case 2: break;
-							case 3: HttpInvokerClient HIC = new HttpInvokerClient();
-									System.out.println(model+"***"+model2+"***"+ model1);
-									String ID = HIC.getid(inFilePath, model,outputNum, model2, model1,threshold);
-									addnetnode(ID);
-									break;
-							default: break;
-						
-						
+					switch (usermethod) {
+					case 1:
+						if (DataBase == null)
+							JOptionPane.showMessageDialog(null,
+									"Please select the input molecule！");
+						else {
+							NewPath = localworkPath + "Job";
+							Shafts sf = new Shafts();
+							sf.shaftinit(NewPath, inFilePath, DataBase,
+									outputNum, threshold);
+							String workid = sf.getworkid();
+							addlocalnode(workid);
+							FilePath1 = localworkPath + workid + "\\";
+							String path = NewPath + "\\Result.list";
+							data = sf.getdata();
+							Vector columnNames = IV.getcolumn();
+							southJPanel.removeAll();
+							southJPanel.updateUI();
+							jTable1 = new JTable();
+							jTable1.setDefaultRenderer(String.class,
+									new MyCellRenderer());
+							CheckTableModle tableModel = new CheckTableModle(
+									data, columnNames);
+							jTable1.setModel(tableModel);
+							jTable1.getTableHeader().setDefaultRenderer(
+									new CheckHeaderCellRenderer(jTable1));
+							//jTable1.addMouseListener(new ShowMol());
+							JScrollPane jScrollPane1 = new JScrollPane(jTable1);
+							southJPanel.add(jScrollPane1);
+							southJPanel.updateUI();
+							flag = 0;
+							ifshow = new Hashtable<String, Integer>();
 						}
-					
+						break;
+					case 2:
+						break;
+					case 3:
+						HttpInvokerClient HIC = new HttpInvokerClient();
+						System.out.println(model + "***" + model2 + "***"
+								+ model1);
+						String ID = HIC.getid(inFilePath, model, outputNum,
+								model2, model1, threshold);
+						addnetnode(ID);
+						break;
+					default:
+						break;
+
+					}
+
 				}
 			}
-		});		
-		/**********************************************EastJPanel*********************************
-		 * The working record place
+		});
+		/**********************************************
+		 * EastJPanel********************************* The working record place
 		 * 2014-07-14
 		 */
 
@@ -1691,10 +1851,11 @@ public class MainUI extends JFrame {
 									southJPanel.updateUI();
 									String path = FilePath1 + name;
 									// System.out.println("后缀名路径为：" + path);
-									data = IV.getdata(path);
+									data = IV.getdata(path,null);
 									Vector columnNames = IV.getcolumn();
 									jTable1 = new JTable();
-									jTable1.setDefaultRenderer(String.class, new MyCellRenderer());
+									jTable1.setDefaultRenderer(String.class,
+											new MyCellRenderer());
 									CheckTableModle tableModel = new CheckTableModle(
 											data, columnNames);
 									jTable1.setModel(tableModel);
@@ -1702,7 +1863,7 @@ public class MainUI extends JFrame {
 											.setDefaultRenderer(
 													new CheckHeaderCellRenderer(
 															jTable1));
-									jTable1.addMouseListener(new ShowMol());
+									//jTable1.addMouseListener(new ShowMol());
 									JScrollPane jScrollPane1 = new JScrollPane(
 											jTable1);
 									southJPanel.add(jScrollPane1);
@@ -1717,8 +1878,8 @@ public class MainUI extends JFrame {
 				});
 
 		eastJPanel.setLayout(new GridLayout(2, 1, 10, 10));
-		root1 = new DefaultMutableTreeNode("本地任务");
-		root2 = new DefaultMutableTreeNode("网络任务");
+		root1 = new DefaultMutableTreeNode("LocalJob");
+		root2 = new DefaultMutableTreeNode("NetWork");
 		LocalTree = new JTree(root1);
 		LocalTree.addMouseListener(new LocalworkMouseHandle());
 		NetTree = new JTree(root2);
@@ -1733,7 +1894,7 @@ public class MainUI extends JFrame {
 		jPanel3.add(scrollPane1);
 		eastJPanel.add(jPanel3);
 		JPanel jPanel4 = new JPanel(new GridLayout(6, 1, 10, 10));
-		//eastJPanel.add(jPanel4);
+		// eastJPanel.add(jPanel4);
 		JPanel jpanel44 = new JPanel(new GridLayout(1, 2, 50, 30));
 		JPanel jPanel55 = new JPanel(new GridLayout(1, 2, 100, 30));
 		JPanel jPanel56 = new JPanel(new GridLayout(1, 2, 100, 30));
@@ -1751,10 +1912,10 @@ public class MainUI extends JFrame {
 		jLabel7.setText(" ");
 		jLabel8.setText(" ");
 		jPanel56.add(jLabel8);
-		//jPanel56.add(jButton11);
+		// jPanel56.add(jButton11);
 		jButton2.setText("打开文件");
 		jButton10.setText("更新");
-		//jButton11.setText("导出结果");
+		// jButton11.setText("导出结果");
 		jPanel4.add(jLabel6);
 		jPanel4.add(jTextField1);
 		jPanel4.add(jPanel55);
@@ -1766,7 +1927,7 @@ public class MainUI extends JFrame {
 		String path = null;
 		IV = new InitVector();
 		// data = new Vector();
-		data = IV.getdata(path);
+		data = IV.getdata(path,null);
 		Vector columnNames = IV.getcolumn();
 		CheckTableModle tableModel = new CheckTableModle(data, columnNames);
 		jTable1 = new JTable();
@@ -1775,7 +1936,7 @@ public class MainUI extends JFrame {
 		jTable1.getTableHeader().setDefaultRenderer(
 				new CheckHeaderCellRenderer(jTable1));
 		TableColumn column = jTable1.getColumnModel().getColumn(5);
-        column.setPreferredWidth(100);
+		column.setPreferredWidth(100);
 		JScrollPane jScrollPane1 = new JScrollPane(jTable1);
 		southJPanel.add(jScrollPane1);
 
@@ -1793,44 +1954,45 @@ public class MainUI extends JFrame {
 	}
 
 	public MainUI() {
-		
-		
-		//new Thread(){
-			String path;
-			//public void run(){
-				PropertyConfig pc = new PropertyConfig();
-				ArrayList<String> a = pc.readProperties();
-				if(a == null){
-					new WorkpathSetUI();
-					//path = pc.getProperty("workpath");
-				}
-				else if((pc.getProperty("showagain")).equals("NO")){
-					new WorkpathSetUI();
-					//path = pc.getProperty("workpath");
-				}
-				//else
-				ArrayList<String> a1 = pc.readProperties();
-				
-				//path = pc1.getProperty("workpath");
-				path = a1.get(1);
-				localworkPath = path + "\\localwork\\";				
-				System.out.println(localworkPath);
-				networkPath = path + "\\network\\";
-				downloadPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\download\\";
-				picturePath = System.getProperty("user.dir") + "\\Pictures";
-				CheckUserStatus CUS = new CheckUserStatus();
-				IsUse = 1;// CUS.getuserstatus();
-				getContentPane().setLayout(new BorderLayout());
-				setLocation(5, 5);
-				setSize(1200, 700);  //1200,700
-				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				setTitle("SHAFTS");
-				initComponents();
-				initwork();
-				//data.removeAllElements();
-				LA.close();
-			//}
-		//}.start();
+
+		// new Thread(){
+		String path;
+		// public void run(){
+		PropertyConfig pc = new PropertyConfig();
+		ArrayList<String> a = pc.readProperties();
+		if (a == null) {
+			new WorkpathSetUI();
+			// path = pc.getProperty("workpath");
+		} else if ((pc.getProperty("showagain")).equals("NO")) {
+			new WorkpathSetUI();
+			// path = pc.getProperty("workpath");
+		}
+		// else
+		ArrayList<String> a1 = pc.readProperties();
+
+		// path = pc1.getProperty("workpath");
+		path = a1.get(1);
+		File file = new File(path);
+		if (!file.exists())
+			file.mkdir();
+		localworkPath = path + "\\localwork\\";
+		System.out.println(localworkPath);
+		networkPath = path + "\\network\\";
+		downloadPath = "D:\\MyOffice\\Github\\SHAFTS\\ChemMapper\\workhome\\download\\";
+		picturePath = System.getProperty("user.dir") + "\\Pictures";
+		CheckUserStatus CUS = new CheckUserStatus();
+		IsUse = 1;// CUS.getuserstatus();
+		getContentPane().setLayout(new BorderLayout());
+		setLocation(5, 5);
+		setSize(1200, 700); // 1200,700
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("SHAFTS");
+		initComponents();
+		initwork();
+		// data.removeAllElements();
+		LA.close();
+		// }
+		// }.start();
 	}
 
 	/**
@@ -1853,7 +2015,7 @@ public class MainUI extends JFrame {
 
 	private String threshold; // 分子相似性阈值
 	private String outputNum; // 最大输出结果分子数
-	
+	private String InputFilepath = null;
 	private String NewPath;
 	private String localworkPath;
 	private String networkPath;
@@ -1861,8 +2023,9 @@ public class MainUI extends JFrame {
 	private String nodeName = null;
 	private String oldName = null;
 	private String picturePath = null;
-	//private LaunchAnimation LA;
+	// private LaunchAnimation LA;
 	// private String newName = null;
+	private JTableHeader header;
 	private int flag = 0; // 分子标记
 	private int IsRename = 0; // 是否重命名标记
 	private int IsUse = 0;
