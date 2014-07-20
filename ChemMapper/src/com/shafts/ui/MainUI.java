@@ -460,13 +460,13 @@ public class MainUI extends JFrame {
 							flag++;
 							ifshow.put("Input", new Integer(flag));
 							for (int i = 1; i < rowCount; i++){
-								for (int j = 1; j < jTable1.getModel().getColumnCount(); j++)
+								for (int j = 0; j < jTable1.getModel().getColumnCount(); j++)
 									stringName1[j] = jTable1.getModel().getValueAt(i, j) .toString(); 
-									show3Dname = stringName1[1]; 
+									show3Dname = stringName1[2]; 
 									String path3 = FilePath1 + show3Dname + ".mol2"; 
 									File mol2file2 = new File(path3); 
 									if (!mol2file2.exists()) 
-										show3Dname = stringName1[0];
+										show3Dname = stringName1[1];
 										flag++; 
 										ifshow.put(show3Dname, new Integer(flag)); 
 										String controller2 = "load APPEND " + "\"" + path3 + "\"" + " ;frame*" + " ;dots on"; 
@@ -490,7 +490,7 @@ public class MainUI extends JFrame {
 				if (e.getButton() == MouseEvent.BUTTON1) {// 单击鼠标左键 
 					String stringName[] = new String[20]; 
 					int colummCount = jTable1.getModel().getColumnCount();// 列数					 
-					for (int i = 1; i < colummCount; i++)
+					for (int i = 0; i < colummCount - 1; i++)
 						stringName[i] = jTable1.getModel().getValueAt(jTable1.getSelectedRow(), i) .toString(); 
 					show3Dname = stringName[1]; 
 					String path1 = FilePath1 + show3Dname + ".mol2"; 
